@@ -1,32 +1,36 @@
 // ========== ПЕРЕМЕННЫЕ ==========
-const baseCSVUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1';
+const baseCSVUrl =
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1";
 
-let items = [], fields = [];
-let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+let items = [],
+  fields = [];
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
 
 // ========== MENU / BURGER ==========
-const burgerMenu = document.getElementById('burger_menu');
-const overlayEl = document.getElementById('overlay');
-const openBurgerBtns = document.querySelectorAll('.icon-button[onclick="openMenu()"]');
-const closeBurgerBtns = document.querySelectorAll('.close-icon, #overlay');
+const burgerMenu = document.getElementById("burger_menu");
+const overlayEl = document.getElementById("overlay");
+const openBurgerBtns = document.querySelectorAll(
+  '.icon-button[onclick="openMenu()"]'
+);
+const closeBurgerBtns = document.querySelectorAll(".close-icon, #overlay");
 
 function openMenu() {
-  burgerMenu?.classList.add('open');
-  overlayEl?.classList.add('active');
+  burgerMenu?.classList.add("open");
+  overlayEl?.classList.add("active");
 }
 
 function closeMenu() {
-  burgerMenu?.classList.remove('open');
-  overlayEl?.classList.remove('active');
+  burgerMenu?.classList.remove("open");
+  overlayEl?.classList.remove("active");
 }
 
 // Навешиваем слушатели
-openBurgerBtns.forEach(btn => btn.addEventListener('click', openMenu));
-closeBurgerBtns.forEach(btn => btn.addEventListener('click', closeMenu));
+openBurgerBtns.forEach((btn) => btn.addEventListener("click", openMenu));
+closeBurgerBtns.forEach((btn) => btn.addEventListener("click", closeMenu));
 
 // ========== ЗАГРУЗКА И РЕНДЕР ИЗБРАННЫХ ==========
 function loadFavorites() {
-  Papa.parse(baseCSVUrl + '&cb=' + Date.now(), {
+  Papa.parse(baseCSVUrl + "&cb=" + Date.now(), {
     download: true,
     header: true,
     skipEmptyLines: true,
@@ -34,31 +38,31 @@ function loadFavorites() {
       fields = r.meta.fields;
       items = r.data;
       renderFavorites();
-    }
+    },
   });
 }
 
 function renderFavorites() {
-  const grid    = document.getElementById('favoritesGrid');
-  const warning = document.getElementById('emptyFavWarning');
-  grid.innerHTML = '';
+  const grid = document.getElementById("favoritesGrid");
+  const warning = document.getElementById("emptyFavWarning");
+  grid.innerHTML = "";
 
   // фильтруем товары по именам в favorites
-  const favItems = items.filter(item => favorites.includes(item[fields[0]]));
+  const favItems = items.filter((item) => favorites.includes(item[fields[0]]));
   if (favItems.length === 0) {
-    warning.style.display = 'block';
+    warning.style.display = "block";
     return;
   }
-  warning.style.display = 'none';
+  warning.style.display = "none";
 
-  favItems.forEach(raw => {
-    const name  = raw[fields[0]] || '';
-    const img   = raw[fields[1]] || '';
-    const price = raw[fields[2]] || '';
-    const desc  = raw[fields[3]] || '';
+  favItems.forEach((raw) => {
+    const name = raw[fields[0]] || "";
+    const img = raw[fields[1]] || "";
+    const price = raw[fields[2]] || "";
+    const desc = raw[fields[3]] || "";
 
-    const card = document.createElement('div');
-    card.className = 'card';
+    const card = document.createElement("div");
+    card.className = "card";
     card.innerHTML = `
       <div class="card-img-wrap">
     <img class='all-products-img' src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
@@ -75,13 +79,13 @@ function renderFavorites() {
     `;
 
     // открыть модалку
-    card.addEventListener('click', () => openModal({ name, img, price, desc }));
+    card.addEventListener("click", () => openModal({ name, img, price, desc }));
 
     // убрать из избранного
-    card.querySelector('.heart-icon').addEventListener('click', e => {
+    card.querySelector(".heart-icon").addEventListener("click", (e) => {
       e.stopPropagation();
-      favorites = favorites.filter(n => n !== name);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+      favorites = favorites.filter((n) => n !== name);
+      localStorage.setItem("favorites", JSON.stringify(favorites));
       renderFavorites();
     });
 
@@ -91,21 +95,32 @@ function renderFavorites() {
 
 // ========== МОДАЛКА ==========
 function openModal({ name, img, price, desc }) {
-  const modal     = document.getElementById('modal');
-  const imgEl     = modal.querySelector('#modalImg');
-  const titleEl   = modal.querySelector('#modalTitle');
-  const priceEl   = modal.querySelector('#modalPrice');
-  const descEl    = modal.querySelector('#modalDesc');
-  const addBtn    = modal.querySelector('#addToCartBtn');
-  const closeBtn  = modal.querySelector('#closeModal');
-  const overlay   = modal.querySelector('#modalOverlay');
+  const modal      = document.getElementById('modal');
+  const content    = modal.querySelector('#modalContent');
+  const imgEl      = modal.querySelector('#modalImg');
+  const titleEl    = modal.querySelector('#modalTitle');
+  const priceEl    = modal.querySelector('#modalPrice');
+  const descEl     = modal.querySelector('#modalDesc');
+  const addBtn     = modal.querySelector('#addToCartBtn');
+  const orderBtn   = modal.querySelector('#orderSingleBtn');
+  const closeBtn   = modal.querySelector('#closeModal');
 
-  imgEl.src        = img;
-  titleEl.textContent   = name;
-  priceEl.textContent   = price + ' ₸';
-  descEl.textContent    = desc;
-  modal.style.display   = 'flex';
+  // Заполняем
+  imgEl.src            = img;
+  titleEl.textContent  = name;
+  priceEl.textContent  = price + ' ₸';
+  descEl.textContent   = desc;
+  modal.style.display  = 'flex';
 
+  // Закрытие при клике по фону
+  modal.onclick = () => modal.style.display = 'none';
+  // Отменяем закрытие, если кликнули внутри окна
+  content.onclick = e => e.stopPropagation();
+
+  // Закрытие при клике на крестик
+  closeBtn.onclick = () => modal.style.display = 'none';
+
+  // В корзину
   addBtn.onclick = () => {
     const cart = JSON.parse(localStorage.getItem('cartItems') || '[]');
     cart.push({ name, img, price });
@@ -113,10 +128,20 @@ function openModal({ name, img, price, desc }) {
     modal.style.display = 'none';
   };
 
-  closeBtn.onclick = overlay.onclick = () => {
+  // WhatsApp — сразу работает
+  orderBtn.onclick = e => {
+    e.stopPropagation(); // чтобы не попало на modal.onclick
+    const message = encodeURIComponent(
+      `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
+    );
+    window.open(
+      `https://api.whatsapp.com/send?phone=+77023971888&text=${message}`,
+      '_blank'
+    );
     modal.style.display = 'none';
   };
 }
 
+
 // ========== INIT ==========
-document.addEventListener('DOMContentLoaded', loadFavorites);
+document.addEventListener("DOMContentLoaded", loadFavorites);
