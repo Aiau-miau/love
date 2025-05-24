@@ -46,7 +46,7 @@ function renderCart() {
     li.innerHTML = `
       <img src="${item.img}" alt="${item.name}" class="cart-product-img">
       <div class="cart-product-text">
-        <p class="cart-name">${item.name}</p>
+        <p class="cart-product-name">${item.name}</p>
         <p class="cart-price">${item.price} ₸</p>
         <button data-i="${i}" class="trash-btn">
           <img src="./images/trash_icon.svg" alt="Удалить">
