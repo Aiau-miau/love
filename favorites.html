@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Love Balloon | Избранные</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="shortcut icon" href="./images/loveballoon-logo.png" type="image/x-icon">
-</head>
-<body>
-  <div id="overlay"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Love Balloon | Избранные</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="shortcut icon"
+      href="./images/loveballoon-logo.png"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div id="overlay"></div>
     <header>
       <div class="icon-button" onclick="openMenu()">
         <img src="./images/burger_menu_icon.svg" alt="Открыть меню" />
@@ -41,8 +45,12 @@
         <a data-cat="women" href="./index.html?cat=women">Для Девушек</a>
         <a data-cat="boys" href="./index.html?cat=boys">Для Мальчиков</a>
         <a data-cat="men" href="./index.html?cat=men">Для Мужчин</a>
-        <a data-cat="baby_boy" href="./index.html?cat=baby_boy">Выписка (мальчик)</a>
-        <a data-cat="baby_girl" href="./index.html?cat=baby_girl">Выписка (девочка)</a>
+        <a data-cat="baby_boy" href="./index.html?cat=baby_boy"
+          >Выписка (мальчик)</a
+        >
+        <a data-cat="baby_girl" href="./index.html?cat=baby_girl"
+          >Выписка (девочка)</a
+        >
       </div>
       <div class="other-links">
         <a href="about.html">О Нас</a>
@@ -51,16 +59,15 @@
       </div>
     </div>
 
-
-  <h1 class="cart-name">Избранные</h1>
-  <div class="grid" id="favoritesGrid"></div>
-  <div id="emptyFavWarning"><p>Нет избранных товаров</p></div>
-  <div id="loader" class="loader" style="display: none">
+    <h1 class="cart-name">Избранные</h1>
+    <div class="grid" id="favoritesGrid"></div>
+    <div id="emptyFavWarning"><p>Нет избранных товаров</p></div>
+    <div id="loader" class="loader" style="display: none">
       <div class="spinner"></div>
     </div>
 
-  <!-- Модальное окно -->
-    <div id="modal" style="display: none;">
+    <!-- Модальное окно -->
+    <div id="modal" style="display: none">
       <div id="modalOverlay"></div>
       <div id="modalContent">
         <span id="closeModal">✕</span>
@@ -76,8 +83,8 @@
               <span><img src="./images/cart_icon_white.svg" alt="" /></span>В
               Корзину
             </button>
-            <button>
-              <span><img src="./images/whatsup_icon.svg" alt="" id="orderSingleBtn"/></span
+            <button id="orderSingleBtn">
+              <span><img src="./images/whatsup_icon.svg" alt="" /></span
               >Заказать
             </button>
           </div>
@@ -85,7 +92,7 @@
       </div>
     </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-  <script src="./favorites.js"></script>
-</body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="./favorites.js"></script>
+  </body>
 </html>

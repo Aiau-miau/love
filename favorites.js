@@ -95,42 +95,64 @@ function renderFavorites() {
 
 // ========== МОДАЛКА ==========
 function openModal({ name, img, price, desc }) {
-  const modal      = document.getElementById('modal');
-  const content    = modal.querySelector('#modalContent');
-  const imgEl      = modal.querySelector('#modalImg');
-  const titleEl    = modal.querySelector('#modalTitle');
-  const priceEl    = modal.querySelector('#modalPrice');
-  const descEl     = modal.querySelector('#modalDesc');
-  const addBtn     = modal.querySelector('#addToCartBtn');
-  const orderBtn   = modal.querySelector('#orderSingleBtn');
-  const closeBtn   = modal.querySelector('#closeModal');
+  const modal     = document.getElementById('modal');
+  const overlay   = modal.querySelector('#modalOverlay');
+  const content   = modal.querySelector('#modalContent');
+  const imgEl     = modal.querySelector('#modalImg');
+  const titleEl   = modal.querySelector('#modalTitle');
+  const priceEl   = modal.querySelector('#modalPrice');
+  const descEl    = modal.querySelector('#modalDesc');
+  const addBtn    = modal.querySelector('#addToCartBtn');
+  const orderBtn  = modal.querySelector('#orderSingleBtn');
+  const closeBtn  = modal.querySelector('#closeModal');
 
-  // Заполняем
-  imgEl.src            = img;
-  titleEl.textContent  = name;
-  priceEl.textContent  = price + ' ₸';
-  descEl.textContent   = desc;
-  modal.style.display  = 'flex';
+  // наполняем
+  imgEl.src           = img;
+  titleEl.textContent = name;
+  priceEl.textContent = price + ' ₸';
+  descEl.textContent  = desc;
+  modal.style.display = 'flex';
 
-  // Закрытие при клике по фону
-  modal.onclick = () => modal.style.display = 'none';
-  // Отменяем закрытие, если кликнули внутри окна
-  content.onclick = e => e.stopPropagation();
+  // очищаем старые слушатели
+  overlay.replaceWith(overlay.cloneNode(true));
+  content.replaceWith(content.cloneNode(true));
+  addBtn.replaceWith(addBtn.cloneNode(true));
+  orderBtn.replaceWith(orderBtn.cloneNode(true));
+  closeBtn.replaceWith(closeBtn.cloneNode(true));
 
-  // Закрытие при клике на крестик
-  closeBtn.onclick = () => modal.style.display = 'none';
+  // заново получить элементы
+  const newOverlay  = modal.querySelector('#modalOverlay');
+  const newContent  = modal.querySelector('#modalContent');
+  const newAddBtn   = modal.querySelector('#addToCartBtn');
+  const newOrderBtn = modal.querySelector('#orderSingleBtn');
+  const newCloseBtn = modal.querySelector('#closeModal');
 
-  // В корзину
-  addBtn.onclick = () => {
+  // клик по оверлею закрывает
+  newOverlay.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // клики внутри контента не всплывают
+  newContent.addEventListener('click', e => {
+    e.stopPropagation();
+  });
+
+  // крестик тоже закрывает
+  newCloseBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // добавление в корзину
+  newAddBtn.addEventListener('click', () => {
     const cart = JSON.parse(localStorage.getItem('cartItems') || '[]');
     cart.push({ name, img, price });
     localStorage.setItem('cartItems', JSON.stringify(cart));
     modal.style.display = 'none';
-  };
+  });
 
-  // WhatsApp — сразу работает
-  orderBtn.onclick = e => {
-    e.stopPropagation(); // чтобы не попало на modal.onclick
+  // заказ в WhatsApp — с первого клика!
+  newOrderBtn.addEventListener('click', e => {
+    e.stopPropagation();
     const message = encodeURIComponent(
       `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
     );
@@ -139,7 +161,7 @@ function openModal({ name, img, price, desc }) {
       '_blank'
     );
     modal.style.display = 'none';
-  };
+  });
 }
 
 
