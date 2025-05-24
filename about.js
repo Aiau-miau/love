@@ -1,4 +1,52 @@
 
+// .
+// ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⡿⠟⠋⠉⠉⠉⠉⠛⠿⣿⣿⣿⣿⡿⠛⠉⠉⠄⠈⠉⠙⠿⣿⣿⣿⣿
+// ⣿⣿⡿⠋⠄⣠⣶⣿⣿⣿⣷⣦⣄⠈⠛⢟⢁⣠⣤⣴⣶⣤⣄⠄⠄⠄⠈⢿⣿⣿
+// ⣿⡿⠁⢠⣾⣿⣿⣿⣿⣿⣿⣿⡿⣿⣦⣀⠈⠛⠛⠋⣸⣿⣿⣷⡄⠄⠄⠄⢻⣿
+// ⣿⠁⢀⣿⣿⣿⣿⣿⣿⣿⠋⠄⠄⣿⣿⣿⣿⣶⣶⣾⣿⣿⣿⣿⣧⠄⠄⠄⠄⣿
+// ⣿⠄⢸⣿⣿⣿⣿⣿⠟⠁⠄⠄⠄⠄⠙⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠄⠄⠄⣿
+// ⣿⠄⠘⣿⣿⣿⣿⡏⠄⠄⠄⠄⠄⠄⠄⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠄⠄⠄⣿
+// ⣿⠄⠄⢻⣿⣿⣿⠁⠄⠄⠄⠄⠄⠄⠄⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠄⠄⢀⣿
+// ⣿⡆⠄⠈⠿⠿⠋⠄⠄⠄⠄⠄⠄⢰⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠄⠄⠄⣸⣿
+// ⣿⣿⡀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠄⠄⣰⣿⣿
+// ⣿⣿⣷⡄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠄⠄⣰⣿⣿⣿
+// ⣿⣿⣿⣿⣄⠄⠄⠄⠄⠄⠄⠄⠄⣰⣿⣿⣿⣿⣿⣿⣿⣿⠏⠄⢀⣴⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣷⣄⠄⠄⠄⠄⠄⣰⣿⣿⣿⣿⣿⣿⣿⡿⠃⠄⣠⣾⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⣿⣷⣄⠄⠄⠄⢿⣿⣿⣿⣿⣿⡿⠋⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣀⠄⠙⢿⣿⠟⠋⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣦⣄⣨⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+// ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+
+
+// ............* ...*
+// ........*..lovel...*
+// .....*..lovelovelo...*
+// ...*..lovelovelove....*
+// ..*.lovelovelovelove...*................*....*
+// .*..lovelovelovelovelo...*.........*..lovel....*
+// *..lovelovelovelovelove...*......*..lovelovelo.*
+// *.. lovelovelovelovelove...*....*...lovelovelo.*
+// .*..lovelovelovelovelove...*..*...lovelovelo...*
+// ..*...lovelovelovelovelove..*...lovelovelo...*
+// ...*....lovelovelolovelovelovelovelovelo...*
+// .....*....lovelovelovelovelovelovelov...*
+// ........*....lovelovelovelovelovelo...*
+// ...........*....lovelovelovelove...*
+// ...............*...lovelovelo....*
+// ..................*..lovelo...*
+// .....................*.....*
+// ......................*..*
+// .......................*
+// ......................*
+// ......................*
+// .......................*
+// .........................*.
+// ...........................*
+// .............................*
+// .............................*
+// ............................*
+
 DG.then(function () {
       const map = DG.map('map', {
         center: [43.236168, 76.858341], // ваши координаты
@@ -23,3 +71,16 @@ function closeMenu() {
   document.getElementById('burger_menu').classList.remove('open');
   overlayEl.classList.remove('active');
 }
+
+// 1) Your desktop Gmail compose URL
+const gmailComposeUrl =
+  'https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=loveballoon.kz@gmail.com';
+
+// 2) Fallback mailto: for mobile
+const mailtoUrl = 'mailto:loveballoon.kz@gmail.com';
+
+// 3) Detect mobile browsers
+const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent);
+
+const link = document.getElementById('contactLink');
+link.href = isMobile ? mailtoUrl : gmailComposeUrl;
