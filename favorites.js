@@ -1,0 +1,122 @@
+// ========== ПЕРЕМЕННЫЕ ==========
+const baseCSVUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1';
+
+let items = [], fields = [];
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+// ========== MENU / BURGER ==========
+const burgerMenu = document.getElementById('burger_menu');
+const overlayEl = document.getElementById('overlay');
+const openBurgerBtns = document.querySelectorAll('.icon-button[onclick="openMenu()"]');
+const closeBurgerBtns = document.querySelectorAll('.close-icon, #overlay');
+
+function openMenu() {
+  burgerMenu?.classList.add('open');
+  overlayEl?.classList.add('active');
+}
+
+function closeMenu() {
+  burgerMenu?.classList.remove('open');
+  overlayEl?.classList.remove('active');
+}
+
+// Навешиваем слушатели
+openBurgerBtns.forEach(btn => btn.addEventListener('click', openMenu));
+closeBurgerBtns.forEach(btn => btn.addEventListener('click', closeMenu));
+
+// ========== ЗАГРУЗКА И РЕНДЕР ИЗБРАННЫХ ==========
+function loadFavorites() {
+  Papa.parse(baseCSVUrl + '&cb=' + Date.now(), {
+    download: true,
+    header: true,
+    skipEmptyLines: true,
+    complete(r) {
+      fields = r.meta.fields;
+      items = r.data;
+      renderFavorites();
+    }
+  });
+}
+
+function renderFavorites() {
+  const grid    = document.getElementById('favoritesGrid');
+  const warning = document.getElementById('emptyFavWarning');
+  grid.innerHTML = '';
+
+  // фильтруем товары по именам в favorites
+  const favItems = items.filter(item => favorites.includes(item[fields[0]]));
+  if (favItems.length === 0) {
+    warning.style.display = 'block';
+    return;
+  }
+  warning.style.display = 'none';
+
+  favItems.forEach(raw => {
+    const name  = raw[fields[0]] || '';
+    const img   = raw[fields[1]] || '';
+    const price = raw[fields[2]] || '';
+    const desc  = raw[fields[3]] || '';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-img-wrap">
+    <img class='all-products-img' src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
+    <img
+      class="heart-icon ${favorites.includes(name) ? "favorited" : ""}"
+      src="./images/${
+        favorites.includes(name) ? "heart_icon_after" : "heart_icon_before"
+      }.svg"
+      alt="Избранное"
+    />
+  </div>
+  <p>${name}</p>
+  <p class="price">${price} ₸</p>
+    `;
+
+    // открыть модалку
+    card.addEventListener('click', () => openModal({ name, img, price, desc }));
+
+    // убрать из избранного
+    card.querySelector('.heart-icon').addEventListener('click', e => {
+      e.stopPropagation();
+      favorites = favorites.filter(n => n !== name);
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      renderFavorites();
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+// ========== МОДАЛКА ==========
+function openModal({ name, img, price, desc }) {
+  const modal     = document.getElementById('modal');
+  const imgEl     = modal.querySelector('#modalImg');
+  const titleEl   = modal.querySelector('#modalTitle');
+  const priceEl   = modal.querySelector('#modalPrice');
+  const descEl    = modal.querySelector('#modalDesc');
+  const addBtn    = modal.querySelector('#addToCartBtn');
+  const closeBtn  = modal.querySelector('#closeModal');
+  const overlay   = modal.querySelector('#modalOverlay');
+
+  imgEl.src        = img;
+  titleEl.textContent   = name;
+  priceEl.textContent   = price + ' ₸';
+  descEl.textContent    = desc;
+  modal.style.display   = 'flex';
+
+  addBtn.onclick = () => {
+    const cart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    cart.push({ name, img, price });
+    localStorage.setItem('cartItems', JSON.stringify(cart));
+    modal.style.display = 'none';
+  };
+
+  closeBtn.onclick = overlay.onclick = () => {
+    modal.style.display = 'none';
+  };
+}
+
+// ========== INIT ==========
+document.addEventListener('DOMContentLoaded', loadFavorites);
