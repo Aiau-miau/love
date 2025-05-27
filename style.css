@@ -463,6 +463,9 @@ header span,
   display: flex;
   gap: 10px;
 }
+.cart-list{
+  margin-bottom: 120px;
+}
 .cart-product-img {
   width: 100px;
   height: 100px;
