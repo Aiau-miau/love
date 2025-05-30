@@ -561,11 +561,31 @@ header span,
 .phone_number {
   text-decoration: underline;
 }
-
-.scroll-to-top {
+.fixed-buttons{
   position: fixed;
   bottom: 24px;
   right: 24px;
+  z-index: 5;
+  display: flex;
+  gap: 10px;
+}
+.fixed-buttons a{
+  background-color: #0fb300;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+.fixed-buttons a:hover{
+  background-color: #0d9001;
+}
+.fixed-buttons a img{
+  width: 24px;
+}
+.scroll-to-top {
   width: 48px;
   height: 48px;
   border: none;
@@ -585,6 +605,10 @@ header span,
 }
 header input{
   border: 1px solid gray;
+}
+
+.menu{
+  line-height: 0.9;
 }
 @media only screen and (max-width: 1024px) {
   .grid {

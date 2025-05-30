@@ -190,6 +190,7 @@ function initFilters() {
       document.getElementById('currentCategoryLabel').textContent =
         labels[activeCategory] || 'Все Товары';
       debouncedRender();
+      closeMenu()
     };
   });
 
