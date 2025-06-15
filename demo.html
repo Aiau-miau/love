@@ -1,73 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-  .order-form {
-    max-width: 400px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #fff0f5;
-    border-radius: 1rem;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    font-family: sans-serif;
-  }
-  .order-form h2 {
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-  .order-form input, .order-form button {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-  }
-  .order-form button {
-    background: #ff4081;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  .order-form button:hover {
-    background: #e91e63;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LoveBalloon Заказ</title>
+  <style>
+    .order-form {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff0f5;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      font-family: sans-serif;
+    }
+    .order-form h2 {
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .order-form input, .order-form button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+    }
+    .order-form button {
+      background: #ff4081;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .order-form button:hover {
+      background: #e91e63;
+    }
+  </style>
 </head>
 <body>
-    <form id="order-form" class="order-form">
-  <h2>Оформление заказа</h2>
-  <input type="text" name="name" placeholder="Ваше имя" required>
-  <input type="tel" name="phone" placeholder="Номер телефона" required>
-  <input type="text" name="items" value="Шары: Розовые, 3 шт" readonly>
-  <input type="number" name="total" value="7500" readonly>
-  <button type="submit">Оплатить и отправить заказ</button>
-</form>
-<script>
-  document.getElementById("order-form").addEventListener("submit", function(e) {
-    e.preventDefault();
+  <form id="order-form" class="order-form">
+    <h2>Оформление заказа</h2>
+    <input type="text" name="name" placeholder="Ваше имя" required>
+    <input type="tel" name="phone" placeholder="Номер телефона" required>
+    <input type="text" name="items" value="Шары: Розовые, 3 шт" readonly>
+    <input type="number" name="total" value="7500" readonly>
+    <button type="submit">Оплатить и отправить заказ</button>
+  </form>
 
-    const name = e.target.name.value;
-    const phone = e.target.phone.value;
-    const items = e.target.items.value;
-    const total = e.target.total.value;
+  <script>
+    document.getElementById("order-form").addEventListener("submit", function(e) {
+      e.preventDefault();
 
-    const message = `🎈 Новый заказ с сайта LoveBalloon 🎈\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n🛍 Товары: ${items}\n💰 Сумма: ${total} ₸\n\n💸 Я оплатил(а) через Kaspi: https://pay.kaspi.kz/pay/pizgc94e`;
+      const name = e.target.name.value;
+      const phone = e.target.phone.value;
+      const items = e.target.items.value;
+      const total = e.target.total.value;
 
-    const encodedMessage = encodeURIComponent(message);
-    const whatsappNumber = "77071234567"; // ← сюда вставь номер менеджера
+      const message = `🎈 Новый заказ с сайта LoveBalloon 🎈\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n🛍 Товары: ${items}\n💰 Сумма: ${total} ₸\n\n💸 Я оплатил(а) через Kaspi: https://pay.kaspi.kz/pay/pizgc94e`;
 
-    const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
-    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappNumber = "77071234567"; // ← номер менеджера (без +)
 
-    window.open(kaspiLink, "_blank"); // открыть оплату
-    setTimeout(() => {
-      window.open(whatsappLink, "_blank"); // отправка данных
-    }, 1000); // подождать 1 сек
-  });
-</script>
+      const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+      const whatsappLink = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
+
+      window.open(kaspiLink, "_blank"); // Открыть Kaspi для оплаты
+      setTimeout(() => {
+        window.open(whatsappLink, "_blank"); // Открыть WhatsApp с заказом
+      }, 1000);
+    });
+  </script>
 </body>
 </html>
