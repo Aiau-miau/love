@@ -35,6 +35,15 @@
     .order-form button:hover {
       background: #e91e63;
     }
+
+    #whatsapp-btn {
+      display: none;
+      margin-top: 10px;
+      background-color: #25d366;
+    }
+    #whatsapp-btn:hover {
+      background-color: #1ebe5b;
+    }
   </style>
 </head>
 <body>
@@ -44,10 +53,14 @@
     <input type="tel" name="phone" placeholder="Номер телефона" required>
     <input type="text" name="items" value="Шары: Розовые, 3 шт" readonly>
     <input type="number" name="total" value="7500" readonly>
-    <button type="submit">Оплатить и отправить заказ</button>
+    <button type="submit">Перейти к оплате</button>
+    <button type="button" id="whatsapp-btn">Отправить заказ в WhatsApp</button>
   </form>
 
   <script>
+    let encodedMessage = '';
+    const whatsappNumber = '77071234567'; // ← номер менеджера (без +)
+
     document.getElementById("order-form").addEventListener("submit", function(e) {
       e.preventDefault();
 
@@ -57,17 +70,18 @@
       const total = e.target.total.value;
 
       const message = `🎈 Новый заказ с сайта LoveBalloon 🎈\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n🛍 Товары: ${items}\n💰 Сумма: ${total} ₸\n\n💸 Я оплатил(а) через Kaspi: https://pay.kaspi.kz/pay/pizgc94e`;
+      encodedMessage = encodeURIComponent(message);
 
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappNumber = "77071234567"; // ← номер менеджера (без +)
+      // Показываем кнопку WhatsApp
+      document.getElementById('whatsapp-btn').style.display = 'block';
 
-      const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+      // Открываем Kaspi
+      window.open('https://pay.kaspi.kz/pay/pizgc94e', '_blank');
+    });
+
+    document.getElementById("whatsapp-btn").addEventListener("click", function() {
       const whatsappLink = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
-
-      window.open(kaspiLink, "_blank"); // Открыть Kaspi для оплаты
-      setTimeout(() => {
-        window.open(whatsappLink, "_blank"); // Открыть WhatsApp с заказом
-      }, 1000);
+      window.open(whatsappLink, '_blank');
     });
   </script>
 </body>
