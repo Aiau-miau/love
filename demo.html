@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LoveBalloon Заказ</title>
+  <meta charset="UTF-8">
+  <title>Заказ | LoveBalloon</title>
   <style>
+    body {
+      font-family: sans-serif;
+      background: #fff0f5;
+      padding: 2rem;
+    }
     .order-form {
       max-width: 400px;
-      margin: 40px auto;
+      margin: auto;
       padding: 20px;
-      background: #fff0f5;
+      background: white;
       border-radius: 1rem;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      font-family: sans-serif;
     }
     .order-form h2 {
-      margin-bottom: 1rem;
       text-align: center;
+      margin-bottom: 1rem;
     }
     .order-form input, .order-form button {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin: 8px 0;
+      font-size: 1rem;
       border: 1px solid #ccc;
       border-radius: 0.5rem;
-      font-size: 1rem;
     }
     .order-form button {
       background: #ff4081;
@@ -35,54 +38,54 @@
     .order-form button:hover {
       background: #e91e63;
     }
-
-    #whatsapp-btn {
-      display: none;
-      margin-top: 10px;
-      background-color: #25d366;
-    }
-    #whatsapp-btn:hover {
-      background-color: #1ebe5b;
-    }
   </style>
 </head>
 <body>
+
   <form id="order-form" class="order-form">
     <h2>Оформление заказа</h2>
     <input type="text" name="name" placeholder="Ваше имя" required>
     <input type="tel" name="phone" placeholder="Номер телефона" required>
     <input type="text" name="items" value="Шары: Розовые, 3 шт" readonly>
     <input type="number" name="total" value="7500" readonly>
-    <button type="submit">Перейти к оплате</button>
-    <button type="button" id="whatsapp-btn">Отправить заказ в WhatsApp</button>
+    <button type="submit">Отправить заказ</button>
   </form>
 
+  <!-- EmailJS -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
-    let encodedMessage = '';
-    const whatsappNumber = '77071234567'; // ← номер менеджера (без +)
+    (function() {
+      emailjs.init("service_f0ri5be");
+    })();
 
-    document.getElementById("order-form").addEventListener("submit", function(e) {
+    const form = document.getElementById("order-form");
+    const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+
+    form.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const name = e.target.name.value;
-      const phone = e.target.phone.value;
-      const items = e.target.items.value;
-      const total = e.target.total.value;
+      const data = {
+        name: form.name.value,
+        phone: form.phone.value,
+        items: form.items.value,
+        total: form.total.value,
+        time: new Date().toLocaleString('ru-RU')
+      };
 
-      const message = `🎈 Новый заказ с сайта LoveBalloon 🎈\n\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n🛍 Товары: ${items}\n💰 Сумма: ${total} ₸\n\n💸 Я оплатил(а) через Kaspi: https://pay.kaspi.kz/pay/pizgc94e`;
-      encodedMessage = encodeURIComponent(message);
+      // Открываем Kaspi — Safari не блокирует, так как это первая вкладка
+      window.open(kaspiLink, "_blank");
 
-      // Показываем кнопку WhatsApp
-      document.getElementById('whatsapp-btn').style.display = 'block';
-
-      // Открываем Kaspi
-      window.open('https://pay.kaspi.kz/pay/pizgc94e', '_blank');
-    });
-
-    document.getElementById("whatsapp-btn").addEventListener("click", function() {
-      const whatsappLink = `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodedMessage}`;
-      window.open(whatsappLink, '_blank');
+      // Отправка письма
+      emailjs.send("service_f0ri5be", "template_s3buh3p", data)
+        .then(() => {
+          alert("✅ Заказ отправлен на почту! Спасибо!");
+        })
+        .catch((err) => {
+          console.error("Ошибка:", err);
+          alert("❌ Ошибка при отправке. Попробуйте ещё раз.");
+        });
     });
   </script>
+
 </body>
 </html>
