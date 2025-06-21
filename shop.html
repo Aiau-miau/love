@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="index, follow">
+    <title>Love Balloon | Товары</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="./images/loveballoon-logo.png" type="image/x-icon">
+  </head>
+  <body>
+    <div id="overlay"></div>
+    <header>
+      <div class="icon-button" onclick="openMenu()">
+        <p class="menu">ME <br>NU</p>
+      </div>
+      <span id="header-title"><a href="index.html">LOVE BALLOON</a></span>
+      <div class="icons">
+        <a href="" id="searchBtn" class="icon-button"
+          ><img src="./images/search_icon.svg"
+        /></a>
+        <a href="./cart.html" class="icon-button"
+          ><img src="./images/cart_icon.svg"
+        /></a>
+      </div>
+    </header>
+
+    <div class="burger" id="burger_menu">
+      <div class="logo">
+        <h1>LOVE BALLOON</h1>
+        <div class="icon-button close-icon" onclick="closeMenu()">
+          <img src="./images/back_icon.svg" alt="Закрыть меню" />
+        </div>
+      </div>
+      <a
+        class="phone_number"
+        href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
+        ><span><img src="./images/phone_icon.svg" alt="" /></span>+7 (702) 397
+        1888</a
+      >
+      <div class="list" id="categoryList">
+        <a data-cat="all" class="active">Все Товары</a>
+        <a data-cat="girls">Для Девочек</a>
+        <a data-cat="women">Для Девушек</a>
+        <a data-cat="boys">Для Мальчиков</a>
+        <a data-cat="men">Для Мужчин</a>
+        <a data-cat="baby_boy">Выписка (мальчик)</a>
+        <a data-cat="baby_girl">Выписка (девочка)</a>
+      </div>
+      <div class="other-links">
+        <a href="about.html">О Нас</a>
+        <a href="cart.html">Корзина</a>
+        <a href="./favorites.html">Избранные</a>
+      </div>
+    </div>
+    <div class="filter">
+      <p id="matchesCount">0 Совподении</p>
+
+      <div class="icon-button">
+        <img src="./images/filter_icon.svg" alt="" id="filter-open-btn" />
+      </div>
+      <div class="filter-menu" id="filter-menu">
+        <div class="icon-button">
+          <img src="./images/back_icon.svg" alt="" id="filter-close-btn" />
+        </div>
+        <div class="types">
+          <p class="tag-name">Типы Шаров</p>
+          <div class="tags">
+            <div class="tag"><p>Стеклянный шар</p></div>
+            <div class="tag"><p>Цифра</p></div>
+            <div class="tag"><p>Баблс</p></div>
+            <div class="tag"><p>Сердце</p></div>
+            <div class="tag"><p>Фигурка</p></div>
+            <div class="tag"><p>С Надписью</p></div>
+            <div class="tag"><p>Коробка</p></div>
+          </div>
+        </div>
+        <div class="colors">
+          <p class="tag-name">Цвета</p>
+          <div class="tags">
+            <div class="tag">
+              <div class="color" style="background-color: #ff84d6"></div>
+              <p>розовый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #e2b1ff"></div>
+              <p>сиреневый</p>
+            </div>
+            <div class="tag">
+              <div
+                class="color"
+                style="
+                  background-color: #ffffff;
+                  border: 1px solid rgb(213, 213, 213);
+                "
+              ></div>
+              <p>белый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #000000"></div>
+              <p>черный</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #ffc400"></div>
+              <p>золотой</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #c7c7c7"></div>
+              <p>серебристый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #feef61"></div>
+              <p>желтый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #ef9343"></div>
+              <p>оранжевый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #ffe6b1"></div>
+              <p>бежевый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #ff8787"></div>
+              <p>красный</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #b1d5ff"></div>
+              <p>голубой</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #b6ffb1"></div>
+              <p>зеленый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #9b5d00"></div>
+              <p>коричневый</p>
+            </div>
+            <div class="tag">
+              <div class="color" style="background-color: #5d49fa"></div>
+              <p>синий</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="category">
+      <h3>РЕБЕНКУ</h3>
+      <h3>МУЖЧИНЕ</h3>
+      <h3>ДЕВУШКЕ</h3>
+    </div>
+
+    <div id="filter-overlay"></div>
+    <div class="active-tags"></div>
+
+    <div id="loader" class="loader" style="display: none">
+      <div class="spinner"></div>
+    </div>
+
+    <div class="grid" id="products"></div>
+
+    <!-- Модальное окно -->
+    <div id="modal" style="display: none">
+      <div id="modalOverlay"></div>
+      <div id="modalContent">
+        <span id="closeModal">✕</span>
+        <img id="modalImg" src="" alt="" />
+        <div class="modal-text">
+          <div class="modal-flex">
+            <h2 id="modalTitle"></h2>
+            <p class="price" id="modalPrice"></p>
+          </div>
+          <pre id="modalDesc"></pre>
+          <div class="modal-buttons">
+            <button id="addToCartBtn">
+              <span><img src="./images/cart_icon_white.svg" alt="" /></span>В
+              Корзину
+            </button>
+            <button id="orderSingleBtn">
+              <span><img src="./images/whatsup_icon.svg" alt="" /></span
+              >Заказать
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fixed-buttons">
+      <a href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><img src="./images/whatsup_icon.svg" alt=""></a>
+      <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Наверх">
+      ↑
+    </button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

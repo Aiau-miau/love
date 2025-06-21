@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Love Balloon</title>
+  <link rel="stylesheet" href="main.css">
+</head>
+<script>
+  // Загрузим и покажем первые 5 карточек
+  document.addEventListener("DOMContentLoaded", () => {
+    const previewContainer = document.getElementById("previewContainer");
+
+    fetchCSVAndRenderPreview();
+
+    function fetchCSVAndRenderPreview() {
+      Papa.parse(
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" + Date.now(),
+        {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete(result) {
+            const fields = result.meta.fields;
+            const data = result.data.slice(0, 5); // первые 5 карточек
+
+            data.forEach(item => {
+              const name = item[fields[0]];
+              const img = item[fields[1]];
+              const price = item[fields[2]];
+              const desc = item[fields[3]];
+
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
+                <div class="card-img-wrap">
+                  <img class="all-products-img" src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
+                </div>
+                <div class='bot'>
+                <div class="card-title">
+                  <p>${name}</p>
+                  <p class="price">${price} ₸</p>
+                </div>
+                <button onclick="orderFromPreview('${name}', '${price}', \`${desc.replace(/`/g, "'")}\`)">Заказать</button>
+                  </div>
+                
+              `;
+              previewContainer.appendChild(card);
+            });
+          }
+        }
+      );
+    }
+
+    document.getElementById("showMoreBtn").addEventListener("click", () => {
+      window.location.href = "shop.html";
+    });
+  });
+
+  function orderFromPreview(name, price, desc) {
+    const message = encodeURIComponent(
+      `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
+    );
+    window.open(`https://api.whatsapp.com/send?phone=+77023971888&text=${message}`, "_blank");
+  }
+</script>
+
+<body>
+  <header>
+    <div class="icon-button" onclick="openMenu()">
+      <p class="menu">ME <br>NU</p>
+    </div>
+    <span id="header-title">LOVE BALLOON</span>
+    <div class="icons">
+      <a href="favorites.html" id="heartIcon" class="icon-button"><img src="./images/white_heart.svg" /></a>
+      <a href="./cart.html" class="icon-button"><img src="./images/white_cart.svg" /></a>
+    </div>
+  </header>
+
+  <div class="burger" id="burger_menu">
+    <div class="logo">
+      <h1>LOVE BALLOON</h1>
+      <div class="icon-button close-icon" onclick="closeMenu()">
+        <img src="./images/back_icon.svg" alt="Закрыть меню" />
+      </div>
+    </div>
+    <a class="phone_number"
+      href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><span><img
+          src="./images/phone_icon.svg" alt="" /></span>+7 (702) 397
+      1888</a>
+    <div class="list" id="categoryList">
+      <a data-cat="all" class="active" href="./shop.html">Все Товары</a>
+      <a data-cat="girls" href="./shop.html?cat=girls">Для Девочек</a>
+      <a data-cat="women" href="./shop.html?cat=women">Для Девушек</a>
+      <a data-cat="boys" href="./shop.html?cat=boys">Для Мальчиков</a>
+      <a data-cat="men" href="./shop.html?cat=men">Для Мужчин</a>
+      <a data-cat="baby_boy" href="./shop.html?cat=baby_boy">Выписка (мальчик)</a>
+      <a data-cat="baby_girl" href="./shop.html?cat=baby_girl">Выписка (девочка)</a>
+    </div>
+    <div class="other-links">
+      <a href="about.html">О Нас</a>
+      <a href="cart.html">Корзина</a>
+      <a href="./favorites.html">Избранные</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="content">
+      <h1>СДЕЛАЙ <br>ПРАЗДНИК <br>ЯРЧЕ</h1>
+      <p>Как создать особенно праздничную <br>атмосферу на семейном или корпоративном <br>мероприятии?</p>
+      <button><a href="./shop.html">Перейти в мазагин</a></button>
+    </div>
+  </div>
+  <div class="all">
+    <div class="grid">
+      <div class="item box1">
+        <a href="shop.html?special=baby">
+          <img src="./images/box1.webp">
+          <h2>ВЫПИСКА</h2>
+        </a>
+      </div>
+
+      <div class="item box2"><img src="./images/box2.webp">
+        <h2>ФОТОЗОНЫ<br>ГИРЛЯНДЫ</h2>
+      </div>
+      <div class="item box3"><img src="./images/box3.webp">
+        <h2>ДЕНЬ РОЖДЕНИЯ</h2>
+      </div>
+      <div class="item box4"><a href="shop.html"><img src="./images/box4.jpg">
+          <h2>ШАРЫ С ГЕЛИЕМ</h2>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="preview-section">
+    <h2>ДЛЯ КОГО?</h2>
+    <div class="category">
+      <h3>РЕБЕНКУ</h3>
+      <h3>МУЖЧИНЕ</h3>
+      <h3>ДЕВУШКЕ</h3>
+    </div>
+    <div id="previewContainer" class="grid preview-grid"></div>
+    <h5 id="showMoreBtn">ПОКАЗАТЬ ЕЩЕ &#8594;</h5>
+  </div>
+  <div class="also_about">
+    <h2>ХОТИТЕ УЗНАТЬ НАС ПОБЛИЖЕ?</h2>
+    <h5><a href="./about.html">O HAC &#8594;</a></h5>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>

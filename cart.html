@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Love Balloon | Корзина</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="shortcut icon"
+      href="./images/loveballoon-logo.png"
+      type="image/x-icon"
+    />
+  </head>
+  <body>
+    <div id="overlay"></div>
+    <header>
+      <div class="icon-button" onclick="openMenu()">
+        <p class="menu">ME <br>NU</p>
+      </div>
+      <span id="header-title">LOVE BALLOON</span>
+
+      <div class="icons">
+        <a href="./cart.html" class="icon-button"
+          ><img src="./images/cart_icon.svg"
+        /></a>
+      </div>
+    </header>
+
+    <div class="burger" id="burger_menu">
+      <div class="logo">
+        <h1>LOVE BALLOON</h1>
+        <div class="icon-button close-icon" onclick="closeMenu()">
+          <img src="./images/back_icon.svg" alt="Закрыть меню" />
+        </div>
+      </div>
+      <a
+        class="phone_number"
+        href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
+        ><span><img src="./images/phone_icon.svg" alt="" /></span>+7 (702) 397
+        1888</a
+      >
+      <div class="list" id="categoryList">
+      <a data-cat="all" class="active" href="./shop.html">Все Товары</a>
+      <a data-cat="girls" href="./shop.html?cat=girls">Для Девочек</a>
+      <a data-cat="women" href="./shop.html?cat=women">Для Девушек</a>
+      <a data-cat="boys" href="./shop.html?cat=boys">Для Мальчиков</a>
+      <a data-cat="men" href="./shop.html?cat=men">Для Мужчин</a>
+      <a data-cat="baby_boy" href="./shop.html?cat=baby_boy">Выписка (мальчик)</a>
+      <a data-cat="baby_girl" href="./shop.html?cat=baby_girl">Выписка (девочка)</a>
+    </div>
+      <div class="other-links">
+        <a href="about.html">О Нас</a>
+        <a href="cart.html">Корзина</a>
+        <a href="./favorites.html">Избранные</a>
+      </div>
+    </div>
+
+    <!-- header/menu как на index.html -->
+    <h1 class="cart-name">Корзина</h1>
+    <ul id="cartList" class="cart-list"></ul>
+    <div id="emptyWarning"><p>Корзина пуста</p></div>
+    <div id="loader" class="loader" style="display: none">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- 👇 Place this right below your cart or instead of the current "order-btn-container" -->
+<div class="order-form">
+  <h2>Оформление заказа</h2>
+  <form id="orderForm">
+    <input type="text" id="name" placeholder="Ваше имя" required />
+    <input type="tel" id="phone" placeholder="Номер телефона" required />
+    <input type="text" id="items" readonly />
+    <input type="text" id="total" readonly />
+    <button type="submit">Оплатить и отправить заказ</button>
+  </form>
+</div>
+
+
+    <div class="order-btn-container">
+      <p id="sum">Итог: 0 ₸</p>
+      <button id="orderBtn" class="order-btn">
+        <img src="./images/whatsup_icon.svg" alt="" />Заказать
+      </button>
+    </div>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="cart.js"></script>
+  </body>
+</html>
