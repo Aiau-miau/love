@@ -174,7 +174,9 @@ function renderCards() {
     `;
     // события
     card.querySelector(".order-now")
-      .onclick = () => openWhatsAppOrder(name, price, desc);
+  .onclick = () => openWhatsAppOrder(name, price, desc, img);
+
+
     card.addEventListener("click", () => openModal({ name, img, price, desc }));
     prod.appendChild(card);
 
@@ -318,13 +320,18 @@ function saveFavorites() {
 }
 
 // ========== МОДАЛЬНОЕ ОКНО ==========
-function openWhatsAppOrder(name, price, desc) {
+function openWhatsAppOrder(name, price, desc, img) {
+  const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+
   const message = encodeURIComponent(
-    `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
+    `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\nОписание: ${desc}\n\nФото: ${img}\n\n💳 Оплата: ${kaspiLink}`
   );
+
   window.open(`https://api.whatsapp.com/send?phone=+77023971888&text=${message}`, "_blank");
   modal.style.display = "none";
 }
+
+
 
 function openModal({ name, img, price, desc }) {
   modal.querySelector("#modalImg").src = img;
@@ -339,7 +346,10 @@ function openModal({ name, img, price, desc }) {
     localStorage.setItem("cartItems", JSON.stringify(cart));
     modal.style.display = "none";
   };
-  modal.querySelector("#orderSingleBtn").onclick = () => openWhatsAppOrder(name, price, desc);
+  modal.querySelector("#orderSingleBtn").onclick = () =>
+  openWhatsAppOrder(name, price, desc, img);
+
+
   modal.querySelectorAll("#closeModal, #modalOverlay").forEach(el => {
     el.onclick = () => modal.style.display = "none";
   });

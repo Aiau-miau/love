@@ -103,64 +103,22 @@ orderBtn.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', renderCart);
 
 
-  // Инициализация EmailJS
-  (function() {
-    emailjs.init("service_f0ri5be"); // <-- Replace with your own ID if needed
-  })();
+  const payBtn = document.getElementById('payBtn');
 
-  const form = document.getElementById("orderForm");
-  const nameInput = document.getElementById("name");
-  const phoneInput = document.getElementById("phone");
-  const itemsInput = document.getElementById("items");
-  const totalInput = document.getElementById("total");
+payBtn.addEventListener('click', () => {
+  if (!cartItems.length) {
+    alert('Корзина пуста!');
+    return;
+  }
 
-  const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+  const total = cartItems
+    .map(item => Number(item.price.replace(/\./g, '')))
+    .reduce((acc, v) => acc + v, 0);
+  const totalFormatted = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-  // Подготовка значений при загрузке
-  document.addEventListener("DOMContentLoaded", () => {
-    const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]");
-
-    if (!cartItems.length) {
-      itemsInput.value = "Корзина пуста";
-      totalInput.value = "0 ₸";
-      return;
-    }
-
-    const itemsText = cartItems.map(item => `${item.name} — ${item.price} ₸`).join("; ");
-    const totalSum = cartItems
-      .map(item => Number(item.price.replace(/\./g, "")))
-      .reduce((acc, val) => acc + val, 0);
-    const formatted = totalSum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-
-    itemsInput.value = itemsText;
-    totalInput.value = `${formatted} ₸`;
-  });
-
-  // Обработка отправки
-  form.addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const orderData = {
-      name: nameInput.value,
-      phone: phoneInput.value,
-      items: itemsInput.value,
-      total: totalInput.value,
-      time: new Date().toLocaleString("ru-RU")
-    };
-
-    // Открываем Kaspi первым (Safari и Chrome любят так)
-    window.open(kaspiLink, "_blank");
-
-    // Отправляем email
-    emailjs.send("service_f0ri5be", "template_s3buh3p", orderData)
-      .then(() => {
-        alert("✅ Заказ отправлен! Спасибо!");
-        form.reset();
-      })
-      .catch(err => {
-        console.error("Ошибка:", err);
-        alert("❌ Ошибка при отправке заказа.");
-      });
-  });
-
-
+  const confirmMsg = `Итого к оплате: ${totalFormatted} ₸\n\nПерейти к оплате через Kaspi?`;
+  if (confirm(confirmMsg)) {
+    // 🔗 Kaspi төлем сілтемесі — нақты ID-мен
+    window.location.href = "https://pay.kaspi.kz/pay/pizgc94e";
+  }
+});
