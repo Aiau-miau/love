@@ -618,49 +618,188 @@ hr{
 }
 
 /* 545px and below */
+/* 545px and below */
 @media screen and (max-width: 545px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
-    top: 640px;
+  /* Header tweaks */
+  header {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  header span {
+    font-size: 20px;
   }
 
-  .burger.open {
-    width: 60%;
-  }
-  .container {
-    background-position: right 50%;
-  }
-
-  #previewContainer,
-  .popular-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  /* Hero content */
   .content h1 {
     font-size: 40px;
     line-height: 1.1;
   }
-
-  .container .content {
-    top: 25%;
-    width: 90%;
+  .content p {
+    font-size: 16px;
   }
 
-  .category {
-    flex-wrap: wrap;
-    gap: 8px;
-    top: 650px;
+  /* Preview & popular grids: 2 columns */
+  #previewContainer,
+  .popular-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
   }
 
-  .category h3 {
-    font-size: 18px;
-  }
-
+  /* Slider images a bit shorter */
   .slider-container img {
-    width: 100%;
     height: 300px;
   }
+
+  /* Buttons and text sizes */
+  .bot button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  #showMoreBtn,
+  #showPopularBtn {
+    font-size: 14px;
+  }
+
+  /* Background repositioning */
+  .container {
+    background-position-x: 60%;
+    background-size: cover;
+    position: absolute;
+    top: -50px;
+  }
+
+  /* Call-to-action button reposition */
+  .content button {
+    position: relative;
+    left: 60px;
+    top: 200px;
+  }
+
+  /* Icon sizes */
+  .icons img {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* Main grid (box1–4) to 2×2 */
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    padding: 15px;
+  }
+  .box1 h2 {
+    bottom: 50%;
+    left: 30%;
+    font-size: 14px;
+  }
+  .box2 h2 {
+    bottom: 50%;
+    left: 25%;
+    font-size: 14px;
+  }
+  .box3 h2,
+  .box4 h2 {
+    bottom: 50%;
+    left: 20%;
+    font-size: 14px;
+  }
+
+  /* Preview section adjustments */
+  .preview-section {
+    padding: 15px;
+  }
+  .preview-section h2 {
+    font-size: 20px;
+    position: relative;
+    top: 200px;
+  }
+  #previewContainer {
+    position: absolute;
+    top: 250px;
+  }
+  .card {
+    width: 90%;
+    max-width: 180px;
+  }
+  .card p {
+    font-size: 14px;
+  }
+  .card-img-wrap img {
+    height: 250px;
+    border-radius: 5px;
+  }
+
+  /* Category nav */
+  .category h3 {
+    position: relative;
+    bottom: 350px;
+    font-size: 16px;
+  }
+
+  /* “Also about” section */
+  .also_about {
+    position: absolute;
+    top: 1500px;
+    width: 100vw;
+    padding: 15px;
+  }
+  .also_about h2 {
+    font-size: 18px;
+  }
+  .also_about h5 {
+    font-size: 14px;
+  }
+
+  /* Popular sets */
+  .popular {
+    position: absolute;
+    top: 1650px;
+    width: 100vw;
+  }
+  .popular h2 {
+    font-size: 20px;
+    position: relative;
+    left: 10px;
+  }
+  .popular-grid {
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    top: 10px;
+    padding: 0 10px;
+  }
+  #showPopularBtn {
+    position: absolute;
+    top: 650px;
+    left: 100px;
+    font-size: 14px;
+  }
+
+  /* Slider & footer reposition */
+  .slider {
+    position: absolute;
+    top: 2200px;
+  }
+  .slider h2 {
+    font-size: 20px;
+  }
+  .footer {
+    position: relative;
+    top: 2200px;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 40px;
+    text-align: center;
+  }
+  .row,
+  .col a {
+    display: flex;
+    justify-content: center;
+  }
+  hr {
+    position: relative;
+    top: 2200px;
+  }
 }
+
 
 /* 320px and below */
 @media screen and (max-width: 320px) {
@@ -714,6 +853,147 @@ hr{
   .icons img{
     width: 20px;
     height: 20px;
+  }
+  .all{
+    position: relative;
+    bottom: 250px;
+  }
+  .grid {
+    grid-template-columns: 1fr 1fr; /* still 2 boxes per row */
+    padding: 10px;
+  }
+
+  .box1 h2 {
+    bottom: 55%;
+    left: 33%;
+    font-size: 12px;
+  }
+
+  .box2 h2 {
+    bottom: 55%;
+    left: 25%;
+    font-size: 12px;
+  } 
+
+  .box3 h2, .box4 h2 {
+    bottom: 55%;
+    left: 15%;
+    font-size: 12px;
+  }
+  .preview-section {
+    padding: 10px;
+  }
+
+  .preview-section h2 {
+    font-size: 18px;
+    position: relative;
+    top: 240px;
+  }
+  #showMoreBtn{
+    position: absolute;
+    top: 1100px;
+    font-size: 12px;
+  }
+
+  #previewContainer {
+    position: absolute;
+    top: 300px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  
+  }
+
+  .card {
+    width: 95%;
+    max-width: 150px;
+  }
+  .card p{
+    font-size: 13px;
+  }
+  .bot button{
+    width: 70px;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    border-radius: 7px;
+  }
+
+  .card-img-wrap img {
+
+    height: 200px;
+    border-radius: 4px;
+  }
+  .category h3{
+    position: relative;
+    bottom: 420px;
+    font-size: 13px;
+  }
+  .also_about{
+    position: absolute;
+    top: 1770px;
+    width: 100vw;
+    height: 20vh;
+    padding: 10px;
+  }
+  .also_about h2{
+    font-size: 16px;
+    position: relative;
+    right: 10px;
+  }
+  .also_about h5{
+    font-size: 12px;
+  }
+  .popular {
+    position: absolute;
+    top: 1950px;
+    left: -15px;
+    width: 100vw;
+  }
+  .popular h2 {
+    font-size: 18px;
+    position: relative;
+    left: 10px;
+  }
+  .popular-grid {
+    grid-template-columns: 1fr 1fr;
+    position: absolute;
+    top: 10px;
+  }
+  #showPopularBtn {
+    position: absolute;
+    top: 840px;
+    font-size: 12px;
+    left: 130px;
+  }
+  .slider{
+    position: absolute;
+    top: 2810px;
+
+  }
+  .slider h2 {
+    font-size: 18px;
+    text-align: center;
+  }
+  .footer{
+    position: relative;
+    top: 2650px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 30px;
+  }
+  .row{
+    display: flex;
+    justify-content: center;
+  }
+  .col a{
+    display: flex;
+    justify-content: center;
+  }
+  hr{
+    position: relative;
+    top: 2650px;
   }
 }
 
