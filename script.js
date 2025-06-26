@@ -4,6 +4,9 @@ let processedItems = [],
   activeCategory = "all",
   searchTerm = "";
 let specialFilter = null;
+let birthFilterWord = null;
+let popularFilterWord = null;
+
 
 // ========== ЭЛЕМЕНТЫ СТРАНИЦЫ ==========
 const loader = document.getElementById("loader");
@@ -23,6 +26,8 @@ const labels = {
   child: "Ребенку",
   man: "Мужчине",
   woman: "Девушке",
+  birth:   "День Рождения",
+  popular: "Популярные товары"
 };
 
 const specialMap = {
@@ -127,27 +132,45 @@ function renderCards() {
   prod.innerHTML = "";
   let cnt = 0;
 
+  const isBirthMode = Boolean(birthFilterWord);
+
+  
+
   const activeTypes = [...document.querySelectorAll(".types .tag.active p")]
     .map(el => normalizeType(el.textContent.trim()));
   const activeColors = [...document.querySelectorAll(".colors .tag.active p")]
     .map(el => el.textContent.trim().toLowerCase());
 
   for (const item of processedItems) {
+    
     const name = item[fields[0]] || "";
     const img = item[fields[1]] || "";
     const price = item[fields[2]] || "";
     const desc = item[fields[3]] || "";
     const category = (item[fields[4]] || "").toLowerCase();
     const colors = (item[fields[5]] || "").split(",").map(s => s.trim().toLowerCase());
+    const extraBirth = (item[fields[6]] || "").toLowerCase();
+    const extraPopular = (item[fields[7]] || "").toLowerCase();
+
+    
 
     // фильтрация по категории
-    let allowedCats = null;
+     // 1) режим baby
     if (specialFilter) {
-      allowedCats = specialFilter;
-    } else if (activeCategory !== "all") {
-      allowedCats = [activeCategory];
+      if (!specialFilter.includes(category)) continue;
     }
-    if (allowedCats && !allowedCats.includes(category)) continue;
+    // 2) режим birth
+    else if (birthFilterWord) {
+      if (!extraBirth.includes(birthFilterWord)) continue;
+    }
+    // 3) режим popular
+    else if (popularFilterWord) {
+      if (!extraPopular.includes(popularFilterWord)) continue;
+    }
+    // 4) обычная категория
+    else if (activeCategory !== "all") {
+      if (category !== activeCategory) continue;
+    }
 
     // фильтрация по типам
     if (activeTypes.length && !activeTypes.every(t => normalizeType(desc.toLowerCase()).includes(t))) continue;
@@ -173,8 +196,12 @@ function renderCards() {
       </div>
     `;
     // события
-    card.querySelector(".order-now")
-  .onclick = () => openWhatsAppOrder(name, price, desc, img);
+    card.querySelector(".order-now").onclick = () => {
+  // name, price, desc, img all come from your item
+  const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+  openWhatsAppOrder(name, price, desc, img, kaspiUrl);
+};
+
 
 
     card.addEventListener("click", () => openModal({ name, img, price, desc }));
@@ -244,6 +271,7 @@ function initFilters() {
 function loadAndInit() {
   const urlCat = new URLSearchParams(window.location.search).get("cat");
   const urlSpecial = new URLSearchParams(window.location.search).get("special");
+  
 
   if (urlCat) {
     activeCategory = urlCat;
@@ -253,10 +281,23 @@ function loadAndInit() {
     updateHeaderTitle(activeCategory);
   }
 
-  if (urlSpecial === "baby") {
-    specialFilter = ["baby_boy", "baby_girl"];
-    updateHeaderTitle("baby");
-  }
+if (urlSpecial === "baby") {
+  specialFilter = ["baby_boy", "baby_girl"];
+  updateHeaderTitle("baby");     // если вы заводили в labels ключ "baby":"Выписка"
+}else if (urlSpecial === "birth") {
+  activeCategory   = "all";
+  specialFilter    = null;
+  birthFilterWord  = "birth";      // <- вот здесь
+  updateHeaderTitle("birth");
+}else if (urlSpecial === "popular") {
+  activeCategory     = "all";
+  specialFilter      = null;
+  birthFilterWord    = null;
+  popularFilterWord  = "yes";      // ищем yes в 7-м столбце
+  updateHeaderTitle("popular");
+}
+
+
 
   loader && (loader.style.display = "block");
 
@@ -320,16 +361,29 @@ function saveFavorites() {
 }
 
 // ========== МОДАЛЬНОЕ ОКНО ==========
-function openWhatsAppOrder(name, price, desc, img) {
-  const kaspiLink = "https://pay.kaspi.kz/pay/pizgc94e";
+function openWhatsAppOrder(name, price, desc, imgUrl, kaspiUrl) {
+  // Build the text of the message, including the image URL and Kaspi link
+  const text = 
+    `Здравствуйте! Хочу заказать:\n\n` +
+    `${name} — ${price} ₸\n` +
+    `Описание: ${desc}\n\n` +
+    `Фото товара: ${imgUrl}\n\n` +
+    `💳 Оплата: ${kaspiUrl}`;
 
-  const message = encodeURIComponent(
-    `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\nОписание: ${desc}\n\nФото: ${img}\n\n💳 Оплата: ${kaspiLink}`
-  );
+  const encoded = encodeURIComponent(text);
+  const whatsappLink = `https://api.whatsapp.com/send?phone=+77023971888&text=${encoded}`;
 
-  window.open(`https://api.whatsapp.com/send?phone=+77023971888&text=${message}`, "_blank");
-  modal.style.display = "none";
+  // First try window.open (new tab). If popup is blocked, fall back:
+  const newWin = window.open(whatsappLink, "_blank");
+  if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
+    // popup blocked → redirect current page instead
+    window.location.href = whatsappLink;
+  }
+
+  // close modal if you’re using one:
+  if (modal) modal.style.display = "none";
 }
+
 
 
 
@@ -346,8 +400,10 @@ function openModal({ name, img, price, desc }) {
     localStorage.setItem("cartItems", JSON.stringify(cart));
     modal.style.display = "none";
   };
-  modal.querySelector("#orderSingleBtn").onclick = () =>
-  openWhatsAppOrder(name, price, desc, img);
+  modal.querySelector("#orderSingleBtn").onclick = () => {
+  const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+  openWhatsAppOrder(currentItem.name, currentItem.price, currentItem.desc, currentItem.img, kaspiUrl);
+};
 
 
   modal.querySelectorAll("#closeModal, #modalOverlay").forEach(el => {
@@ -358,7 +414,10 @@ document.querySelectorAll(".category h3").forEach(h3 => {
   h3.addEventListener("click", () => {
     document.querySelectorAll(".category h3").forEach(x => x.classList.remove("active"));
     h3.classList.add("active");
-    // … остальной код
   });
 });
+const urlParams = new URLSearchParams(window.location.search);
 
+
+
+  

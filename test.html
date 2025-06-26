@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test CSV</title></head>
+<body>
+  <pre id="out">загрузка…</pre>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script>
+    const CSV_URL = "…твоя pub?output=csv&gid=1918860157…";
+
+    fetch(CSV_URL)
+      .then(r => r.text())
+      .then(text => {
+        document.getElementById("out").textContent = text;
+        return Papa.parse(text, { header:true, complete(res){ console.log(res.data); } });
+      })
+      .catch(e => console.error(e));
+  </script>
+</body>
+</html>

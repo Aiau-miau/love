@@ -77,48 +77,48 @@ function renderCart() {
 }
 
 // ========= ЗАКАЗ ЧЕРЕЗ WHATSAPP =========
+// ========= OPEN WHATSAPP WITH IMAGE & KASPI =========
+function openWhatsAppOrder(name, price, desc, imgUrl) {
+  const kaspiUrl = 'https://pay.kaspi.kz/pay/pizgc94e';
+  const text =
+    `Здравствуйте! Хочу заказать:\n\n` +
+    `${name} — ${price} ₸\n` +
+    (desc ? `Описание: ${desc}\n\n` : '') +
+    `Фото товара: ${imgUrl}\n\n` +
+    `💳 Оплата: ${kaspiUrl}`;
+
+  const link = `https://api.whatsapp.com/send?phone=+77023971888&text=${encodeURIComponent(text)}`;
+  const newWin = window.open(link, '_blank');
+  if (!newWin) window.location.href = link;  // fallback if popup blocked
+}
+
+// ========= ЗАКАЗ ЧЕРЕЗ WHATSAPP =========
 orderBtn.addEventListener('click', () => {
   if (!cartItems.length) {
     alert('Корзина пуста!');
     return;
   }
 
-  const lines = cartItems.map(item =>
-    `${item.name} — ${item.price} ₸\n${item.img}`
-  ).join('\n\n');
+  // Build an items description and grab the first image URL
+  const itemsDesc = cartItems
+    .map(item => `${item.name} — ${item.price} ₸`)
+    .join('; ');
+  const firstImg = cartItems[0].img;
 
+  // Compute total
   const total = cartItems
     .map(item => Number(item.price.replace(/\./g, '')))
-    .reduce((acc, v) => acc + v, 0);
-  const totalFormatted = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    .reduce((sum, v) => sum + v, 0)
+    .toString()
+    .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-  const message = encodeURIComponent(
-    `Здравствуйте! Хочу заказать:\n\n${lines}\n\nИтого: ${totalFormatted} ₸`
-  );
-  const phone = '+77023971888';
-  window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${message}`, '_blank');
+  // Fire!
+  openWhatsAppOrder('Заказ из корзины', total, itemsDesc, firstImg);
 });
+
 
 // ========= ИНИЦИАЛИЗАЦИЯ =========
 document.addEventListener('DOMContentLoaded', renderCart);
 
 
-  const payBtn = document.getElementById('payBtn');
-
-payBtn.addEventListener('click', () => {
-  if (!cartItems.length) {
-    alert('Корзина пуста!');
-    return;
-  }
-
-  const total = cartItems
-    .map(item => Number(item.price.replace(/\./g, '')))
-    .reduce((acc, v) => acc + v, 0);
-  const totalFormatted = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  const confirmMsg = `Итого к оплате: ${totalFormatted} ₸\n\nПерейти к оплате через Kaspi?`;
-  if (confirm(confirmMsg)) {
-    // 🔗 Kaspi төлем сілтемесі — нақты ID-мен
-    window.location.href = "https://pay.kaspi.kz/pay/pizgc94e";
-  }
-});
+  
