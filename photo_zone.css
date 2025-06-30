@@ -111,15 +111,10 @@ body {
 }
 
 header {
-  position: relative;
-  z-index: 6;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
   padding: 10px;
-  padding-left: 80px;
-  padding-right: 100px;
 }
 
 header span {
@@ -144,18 +139,18 @@ header span,
   height: 25px;
 }
 /* 1. Make the container a 5-column grid */
-#photoZoneContainer {
+.photoZoneContainer {
+  min-height: 90vh;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   padding: 20px;
 }
-
-#photoZoneContainer .card {
+.photoZoneContainer .card {
   text-align: center;
 }
 
-#photoZoneContainer .card-body {
+.photoZoneContainer .card-body {
   display: flex;
   justify-content: space-between;
 }
@@ -338,4 +333,69 @@ header span,
 .scroll-to-top:hover {
   opacity: 1;
 }
+.footer{
+  height: 30vh;
+  display: flex;
+  justify-content: space-around;
+  padding-top: 50px;
+}
+hr{
+  color: gray;
+  margin-top: 40px;
+}
+.col{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.row{
+  display: flex;
+  gap: 20px;
+}
+.col h5{
+  color: gray;
+}
+.col a{
+  color: gray;
+}
 
+@media only screen and (max-width:1024px){
+  .photoZoneContainer{
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media only screen and (max-width: 825px) {
+  .photoZoneContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .footer{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .row{
+    justify-content: center;
+  }
+}
+@media only screen and (max-width: 545px) {
+  .photoZoneContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .card-img img{
+    height: 280px;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .card-img img{
+    height: 250px;
+  }
+  .card-title{
+    font-size: 12px;
+  }
+  .title{
+    font-size: 20px;
+  }
+  .photoZoneContainer{
+    padding: 10px;
+  }
+}
