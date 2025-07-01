@@ -756,6 +756,44 @@ hr{
 .col a{
   color: gray;
 }
+/* CSS */
+.category-slider-wrapper {
+  overflow: hidden;                  /* прячет лишние элементы за рамками */
+}
+.category-slider {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  overflow-x: auto;                 /* включает горизонтальную прокрутку */
+  scroll-behavior: smooth;           /* плавный скролл при js */
+  -webkit-overflow-scrolling: touch; /* плавность на iOS */
+  scroll-snap-type: x mandatory;     /* привязка прокрутки к элементам */
+}
+.category-slider a {
+  flex: 0 0 auto;
+  padding: 0.5rem 1rem;
+  white-space: nowrap;
+  scroll-snap-align: start;         /* начало каждого элемента */
+  text-decoration: none;
+  color: #333;
+  border-radius: 20px;
+  background: #f0f0f0;
+  transition: background .2s;
+}
+.category-slider a.active,
+.category-slider a:hover {
+  background: #ddd;
+}
+/* Скрыть скроллбар в WebKit-браузерах */
+.category-slider::-webkit-scrollbar {
+  display: none;
+}
+/* Скрыть скроллбар в Firefox */
+.category-slider {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 
 @media only screen and (max-width: 1024px) {
   .grid {
