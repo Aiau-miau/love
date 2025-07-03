@@ -793,7 +793,9 @@ hr{
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
+.hide-category-list {
+  display: none !important;
+}
 
 @media only screen and (max-width: 1024px) {
   .grid {

@@ -1,39 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Love Balloon</title>
-    <link rel="stylesheet" href="main.css" />
-  </head>
-  <script>
-    // Загрузим и покажем первые 5 карточек
-    document.addEventListener("DOMContentLoaded", () => {
-      const previewContainer = document.getElementById("previewContainer");
 
-      fetchCSVAndRenderPreview();
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Balloon</title>
+  <link rel="stylesheet" href="main.css" />
+</head>
+<script>
+  // Загрузим и покажем первые 5 карточек
+  document.addEventListener("DOMContentLoaded", () => {
+    const previewContainer = document.getElementById("previewContainer");
 
-      function fetchCSVAndRenderPreview() {
-        Papa.parse(
-          "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" +
-            Date.now(),
-          {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            complete(result) {
-              const fields = result.meta.fields;
-              const data = result.data.slice(0, 5); // первые 5 карточек
+    fetchCSVAndRenderPreview();
 
-              data.forEach((item) => {
-                const name = item[fields[0]];
-                const img = item[fields[1]];
-                const price = item[fields[2]];
-                const desc = item[fields[3]].replace(/`/g, "'");
+    function fetchCSVAndRenderPreview() {
+      Papa.parse(
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" +
+        Date.now(),
+        {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete(result) {
+            const fields = result.meta.fields;
+            const data = result.data.slice(0, 5); // первые 5 карточек
 
-                const card = document.createElement("div");
-                card.className = "card";
-                card.innerHTML = `
+            data.forEach((item) => {
+              const name = item[fields[0]];
+              const img = item[fields[1]];
+              const price = item[fields[2]];
+              const desc = item[fields[3]].replace(/`/g, "'");
+
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
                 <div class="card-img-wrap">
                   <img class="all-products-img" src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
                 </div>
@@ -52,20 +53,200 @@
                   >Заказать</button>
                 </div>
               `;
-                previewContainer.appendChild(card);
-              });
-            },
-          }
-        );
-      }
+              previewContainer.appendChild(card);
+            });
+          },
+        }
+      );
+    }
 
-      document.getElementById("showMoreBtn").addEventListener("click", () => {
-        window.location.href = "shop.html";
-      });
+    document.getElementById("showMoreBtn").addEventListener("click", () => {
+      window.location.href = "shop.html";
     });
+  });
 
-    // Обновлённая функция: теперь принимает imgUrl и вставляет ссылку Kaspi
-    function orderFromPreview(name, price, desc, imgUrl) {
+  // Обновлённая функция: теперь принимает imgUrl и вставляет ссылку Kaspi
+  function orderFromPreview(name, price, desc, imgUrl) {
+    const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+    const text =
+      `Здравствуйте! Хочу заказать:\n\n` +
+      `${name} — ${price} ₸\n` +
+      `Описание: ${desc}\n\n` +
+      `Фото товара: ${imgUrl}\n\n` +
+      `💳 Оплата: ${kaspiUrl}`;
+    const message = encodeURIComponent(text);
+    window.open(
+      `https://api.whatsapp.com/send?phone=+77023971888&text=${message}`,
+      "_blank"
+    );
+  }
+</script>
+
+<body>
+  <div id="overlay"></div>
+  <div class="header-wrapper">
+    <header>
+      <div class="icon-button" onclick="openMenu()">
+        <p class="menu">ME <br />NU</p>
+      </div>
+      <span id="header-title">LOVE BALLOON</span>
+      <div class="icons">
+        <a href="favorites.html" id="heartIcon" class="icon-button"><img src="./images/white_heart.svg" /></a>
+        <a href="./cart.html" class="icon-button"><img src="./images/cart_icon_white.svg" /></a>
+      </div>
+    </header>
+  </div>
+
+  <div class="burger" id="burger_menu">
+    <div class="logo">
+      <h1>LOVE BALLOON</h1>
+      <div class="icon-button close-icon" onclick="closeMenu()">
+        <img src="./images/back_icon.svg" alt="Закрыть меню" />
+      </div>
+    </div>
+    <a class="phone_number"
+      href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><span><img
+          src="./images/phone_icon.svg" alt="" /></span>+7 (702) 397
+      1888</a>
+    <div class="list" id="categoryList">
+      <a data-cat="all" class="active" href="./shop.html">Все Товары</a>
+      <a data-cat="girls" href="./shop.html?cat=girls">Для Девочек</a>
+      <a data-cat="women" href="./shop.html?cat=women">Для Девушек</a>
+      <a data-cat="boys" href="./shop.html?cat=boys">Для Мальчиков</a>
+      <a data-cat="men" href="./shop.html?cat=men">Для Мужчин</a>
+      <a data-cat="baby_boy" href="./shop.html?cat=baby_boy">Выписка (мальчик)</a>
+      <a data-cat="baby_girl" href="./shop.html?cat=baby_girl">Выписка (девочка)</a>
+    </div>
+    <div class="other-links">
+      <a href="about.html">О Нас</a>
+      <a href="cart.html">Корзина</a>
+      <a href="./favorites.html">Избранные</a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="content">
+      <h1>СДЕЛАЙ <br />ПРАЗДНИК <br />ЯРЧЕ</h1>
+      <p>
+        Как создать особенно праздничную <br />атмосферу на семейном или
+        корпоративном <br />мероприятии?
+      </p>
+      <button class="btnn"><a href="./shop.html">Перейти в мазагин</a></button>
+    </div>
+  </div>
+  <div class="all">
+    <div class="grid">
+      <div class="item box1">
+        <a href="shop.html?special=baby">
+          <img src="./images/box1.webp" />
+          <h2>ВЫПИСКА</h2>
+        </a>
+      </div>
+
+      <div class="item box2">
+        <a href="photo_zone.html"><img src="./images/box2.webp" />
+          <h2>ФОТОЗОНЫ<br />ГИРЛЯНДЫ</h2>
+        </a>
+      </div>
+      <div class="item box3">
+        <a href="shop.html?special=birth">
+          <img src="./images/box3.webp" />
+          <h2>ДЕНЬ РОЖДЕНИЯ</h2>
+        </a>
+      </div>
+      <div class="item box4">
+        <a href="shop.html"><img src="./images/box4.jpg" />
+          <h2>ШАРЫ С ГЕЛИЕМ</h2>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-section">
+    <h2>ДЛЯ КОГО?</h2>
+    <div id="previewContainer" class="preview-grid"></div>
+    <h5 id="showMoreBtn">ПОКАЗАТЬ ЕЩЕ &#8594;</h5>
+  </div>
+  <div class="also_about">
+    <h2>ХОТИТЕ УЗНАТЬ НАС ПОБЛИЖЕ?</h2>
+    <h5><a href="./about.html">O HAC &#8594;</a></h5>
+  </div>
+
+  <div class="popular">
+    <h2>ПОПУЛЯРНЫЕ НАБОРЫ</h2>
+    <div id="popularContainer" class="popular-grid"></div>
+    <h5 id="showPopularBtn">ПОКАЗАТЬ ЕЩЕ →</h5>
+  </div>
+
+  <div class="carousel-wrapper">
+    <h2>ПРАЗДНИЧНЫЕ ИСТОРИИ</h2>
+    <div class="carousel">
+      <button class="nav prev">&larr;</button>
+
+      <div class="carousel-track">
+        <img src="images/slider1.jpg" />
+        <img src="images/slider2.jpg" />
+        <img src="images/slider3.jpg" />
+        <img src="images/slider4.jpg" />
+        <img src="images/slider5.jpg" />
+        <img src="images/slider6.jpg" />
+        <img src="images/slider7.jpg" />
+        <img src="images/slider8.jpg" />
+        <img src="images/slider9.jpg" />
+        <img src="images/slider10.jpg" />
+        <img src="images/slider11.jpg" />
+        <img src="images/slider12.jpg" />
+      </div>
+
+      <button class="nav next">&rarr;</button>
+    </div>
+  </div>
+
+
+
+  <hr />
+  <div class="footer">
+    <div class="col">
+      <span id="header-title">LOVE BALLOON</span>
+    </div>
+    <div class="col">
+      <a class="phone_number"
+        href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><span><img
+            src="./images/gray-phone.svg" alt="" /></span>+7 (702) 397
+        1888</a>
+      <h5>
+        <a
+          href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=loveballoon.kz@gmail.com">loveballoon.kz@gmail.com</a>
+      </h5>
+      <h5>
+        г. Алматы, 2-й микрорайон,<br />
+        дом 17 (вдоль улицы Жубанова)
+      </h5>
+    </div>
+    <div class="col">
+      <div class="row">
+        <a href="https://www.instagram.com/loveballoon.kz/" target="_blank" rel="noopener noreferrer"><img
+            src="./images/Group 65.svg" /></a>
+        <a href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><img
+            src="./images/Group 66.svg" /></a>
+      </div>
+      <div class="row">
+        <h5>© Интернет-магазин loveballoon</h5>
+      </div>
+    </div>
+  </div>
+  <div class="fixed-buttons">
+    <a href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"><img
+        src="./images/whatsup_icon.svg" alt="" /></a>
+    <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Наверх">
+      ↑
+    </button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+  <script>
+    // Функция для отправки заказа с картинкой и ссылкой Kaspi
+    function orderFromPopular(name, price, desc, imgUrl) {
       const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
       const text =
         `Здравствуйте! Хочу заказать:\n\n` +
@@ -79,238 +260,34 @@
         "_blank"
       );
     }
-  </script>
 
-  <body>
-    <div id="overlay"></div>
-    <div class="header-wrapper">
-      <header>
-        <div class="icon-button" onclick="openMenu()">
-          <p class="menu">ME <br />NU</p>
-        </div>
-        <span id="header-title">LOVE BALLOON</span>
-        <div class="icons">
-          <a href="favorites.html" id="heartIcon" class="icon-button"
-            ><img src="./images/white_heart.svg"
-          /></a>
-          <a href="./cart.html" class="icon-button"
-            ><img src="./images/cart_icon_white.svg"
-          /></a>
-        </div>
-      </header>
-    </div>
+    document.addEventListener("DOMContentLoaded", () => {
+      const popularContainer = document.getElementById("popularContainer");
+      const csvUrl =
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" +
+        Date.now();
 
-    <div class="burger" id="burger_menu">
-      <div class="logo">
-        <h1>LOVE BALLOON</h1>
-        <div class="icon-button close-icon" onclick="closeMenu()">
-          <img src="./images/back_icon.svg" alt="Закрыть меню" />
-        </div>
-      </div>
-      <a
-        class="phone_number"
-        href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
-        ><span><img src="./images/phone_icon.svg" alt="" /></span>+7 (702) 397
-        1888</a
-      >
-      <div class="list" id="categoryList">
-        <a data-cat="all" class="active" href="./shop.html">Все Товары</a>
-        <a data-cat="girls" href="./shop.html?cat=girls">Для Девочек</a>
-        <a data-cat="women" href="./shop.html?cat=women">Для Девушек</a>
-        <a data-cat="boys" href="./shop.html?cat=boys">Для Мальчиков</a>
-        <a data-cat="men" href="./shop.html?cat=men">Для Мужчин</a>
-        <a data-cat="baby_boy" href="./shop.html?cat=baby_boy"
-          >Выписка (мальчик)</a
-        >
-        <a data-cat="baby_girl" href="./shop.html?cat=baby_girl"
-          >Выписка (девочка)</a
-        >
-      </div>
-      <div class="other-links">
-        <a href="about.html">О Нас</a>
-        <a href="cart.html">Корзина</a>
-        <a href="./favorites.html">Избранные</a>
-      </div>
-    </div>
-    <div class="container">
-      <div class="content">
-        <h1>СДЕЛАЙ <br />ПРАЗДНИК <br />ЯРЧЕ</h1>
-        <p>
-          Как создать особенно праздничную <br />атмосферу на семейном или
-          корпоративном <br />мероприятии?
-        </p>
-        <button class="btnn"><a href="./shop.html">Перейти в мазагин</a></button>
-      </div>
-    </div>
-    <div class="all">
-      <div class="grid">
-        <div class="item box1">
-          <a href="shop.html?special=baby">
-            <img src="./images/box1.webp" />
-            <h2>ВЫПИСКА</h2>
-          </a>
-        </div>
+      Papa.parse(csvUrl, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete(result) {
+          const flagField = result.meta.fields[7];
+          const popularOnly = result.data
+            .filter(
+              (item) => (item[flagField] || "").trim().toLowerCase() === "yes"
+            )
+            .slice(0, 5);
 
-        <div class="item box2">
-          <a href="photo_zone.html"
-            ><img src="./images/box2.webp" />
-            <h2>ФОТОЗОНЫ<br />ГИРЛЯНДЫ</h2></a
-          >
-        </div>
-        <div class="item box3">
-          <a href="shop.html?special=birth">
-            <img src="./images/box3.webp" />
-            <h2>ДЕНЬ РОЖДЕНИЯ</h2>
-          </a>
-        </div>
-        <div class="item box4">
-          <a href="shop.html"
-            ><img src="./images/box4.jpg" />
-            <h2>ШАРЫ С ГЕЛИЕМ</h2>
-          </a>
-        </div>
-      </div>
-    </div>
+          popularOnly.forEach((item) => {
+            const name = item[result.meta.fields[0]];
+            const img = item[result.meta.fields[1]];
+            const price = item[result.meta.fields[2]];
+            const desc = item[result.meta.fields[3]].replace(/`/g, "'");
 
-    <div class="preview-section">
-      <h2>ДЛЯ КОГО?</h2>
-      <div id="previewContainer" class="preview-grid"></div>
-      <h5 id="showMoreBtn">ПОКАЗАТЬ ЕЩЕ &#8594;</h5>
-    </div>
-    <div class="also_about">
-      <h2>ХОТИТЕ УЗНАТЬ НАС ПОБЛИЖЕ?</h2>
-      <h5><a href="./about.html">O HAC &#8594;</a></h5>
-    </div>
-
-    <div class="popular">
-      <h2>ПОПУЛЯРНЫЕ НАБОРЫ</h2>
-      <div id="popularContainer" class="popular-grid"></div>
-      <h5 id="showPopularBtn">ПОКАЗАТЬ ЕЩЕ →</h5>
-    </div>
-
-   <div class="carousel-wrapper">
-  <h2>ПРАЗДНИЧНЫЕ ИСТОРИИ</h2>
-  <div class="carousel">
-    <button class="nav prev">&larr;</button>
-
-    <div class="carousel-track">
-      <img src="images/slider1.jpg" />
-      <img src="images/slider2.jpg" />
-      <img src="images/slider3.jpg" />
-      <img src="images/slider4.jpg" />
-      <img src="images/slider5.jpg" />
-      <img src="images/slider6.jpg" />
-      <img src="images/slider7.jpg" />
-      <img src="images/slider8.jpg" />
-      <img src="images/slider9.jpg" />
-      <img src="images/slider10.jpg" />
-      <img src="images/slider11.jpg" />
-      <img src="images/slider12.jpg" />
-    </div>
-
-    <button class="nav next">&rarr;</button>
-  </div>
-</div>
-
-
-
-    <hr />
-    <div class="footer">
-      <div class="col">
-        <span id="header-title">LOVE BALLOON</span>
-      </div>
-      <div class="col">
-        <a
-          class="phone_number"
-          href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
-          ><span><img src="./images/gray-phone.svg" alt="" /></span>+7 (702) 397
-          1888</a
-        >
-        <h5>
-          <a
-            href="https://mail.google.com/mail/?view=cm&fs=1&tf=1&to=loveballoon.kz@gmail.com"
-            >loveballoon.kz@gmail.com</a
-          >
-        </h5>
-        <h5>
-          г. Алматы, 2-й микрорайон,<br />
-          дом 17 (вдоль улицы Жубанова)
-        </h5>
-      </div>
-      <div class="col">
-        <div class="row">
-          <a
-            href="https://www.instagram.com/loveballoon.kz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            ><img src="./images/Group 65.svg"
-          /></a>
-          <a
-            href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
-            ><img src="./images/Group 66.svg"
-          /></a>
-        </div>
-        <div class="row">
-          <h5>© Интернет-магазин loveballoon</h5>
-        </div>
-      </div>
-    </div>
-    <div class="fixed-buttons">
-      <a
-        href="https://api.whatsapp.com/send/?phone=%2B77023971888&text&type=phone_number&app_absent=0"
-        ><img src="./images/whatsup_icon.svg" alt=""
-      /></a>
-      <button id="scrollToTopBtn" class="scroll-to-top" aria-label="Наверх">
-        ↑
-      </button>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-
-    <script>
-      // Функция для отправки заказа с картинкой и ссылкой Kaspi
-      function orderFromPopular(name, price, desc, imgUrl) {
-        const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
-        const text =
-          `Здравствуйте! Хочу заказать:\n\n` +
-          `${name} — ${price} ₸\n` +
-          `Описание: ${desc}\n\n` +
-          `Фото товара: ${imgUrl}\n\n` +
-          `💳 Оплата: ${kaspiUrl}`;
-        const message = encodeURIComponent(text);
-        window.open(
-          `https://api.whatsapp.com/send?phone=+77023971888&text=${message}`,
-          "_blank"
-        );
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const popularContainer = document.getElementById("popularContainer");
-        const csvUrl =
-          "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" +
-          Date.now();
-
-        Papa.parse(csvUrl, {
-          download: true,
-          header: true,
-          skipEmptyLines: true,
-          complete(result) {
-            const flagField = result.meta.fields[7];
-            const popularOnly = result.data
-              .filter(
-                (item) => (item[flagField] || "").trim().toLowerCase() === "yes"
-              )
-              .slice(0, 5);
-
-            popularOnly.forEach((item) => {
-              const name = item[result.meta.fields[0]];
-              const img = item[result.meta.fields[1]];
-              const price = item[result.meta.fields[2]];
-              const desc = item[result.meta.fields[3]].replace(/`/g, "'");
-
-              const card = document.createElement("div");
-              card.className = "card";
-              card.innerHTML = `
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `
             <div class="card-img-wrap">
               <img src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
             </div>
@@ -329,89 +306,90 @@
               >Заказать</button>
             </div>
           `;
-              popularContainer.appendChild(card);
-            });
-          },
-          error(err) {
-            console.error("PapaParse error:", err);
-          },
-        });
-
-        document
-          .getElementById("showPopularBtn")
-          .addEventListener("click", () => {
-            window.location.href = "shop.html?special=popular";
+            popularContainer.appendChild(card);
           });
+        },
+        error(err) {
+          console.error("PapaParse error:", err);
+        },
       });
 
+      document
+        .getElementById("showPopularBtn")
+        .addEventListener("click", () => {
+          window.location.href = "shop.html?special=popular";
+        });
+    });
 
 
 
-  const track = document.querySelector('.carousel-track');
-  let slides = Array.from(track.children);
-  const prevBtn = document.querySelector('.prev');
-  const nextBtn = document.querySelector('.next');
-  const slideWidth = slides[0].getBoundingClientRect().width + 40; // margin
-  // 1) клоны
-  const firstClone = slides[0].cloneNode(true);
-  const lastClone  = slides[slides.length - 1].cloneNode(true);
-  track.appendChild(firstClone);
-  track.insertBefore(lastClone, track.firstChild);
-  let allSlides = Array.from(track.children);
-  let currentIndex = 1;
 
-  // 2) позиционируем без анимации
-  function goTo(index, animate = true) {
-    const offset = -index * slideWidth + (track.parentElement.clientWidth - slideWidth) / 2;
-    if (!animate) track.style.transition = 'none';
-    else track.style.transition = 'transform 0.5s ease';
-    track.style.transform = `translateX(${offset}px)`;
-    allSlides.forEach((s,i) => s.classList.toggle('active', i === index));
-  }
-  goTo(currentIndex, false);
+    const track = document.querySelector('.carousel-track');
+    let slides = Array.from(track.children);
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    const slideWidth = slides[0].getBoundingClientRect().width + 40; // margin
+    // 1) клоны
+    const firstClone = slides[0].cloneNode(true);
+    const lastClone = slides[slides.length - 1].cloneNode(true);
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, track.firstChild);
+    let allSlides = Array.from(track.children);
+    let currentIndex = 1;
 
-  // 3) кнопки
-  nextBtn.onclick = () => { currentIndex++; goTo(currentIndex); };
-  prevBtn.onclick = () => { currentIndex--; goTo(currentIndex); };
-
-  // 4) после анимации — бесшумный «ремаппинг»
-  track.addEventListener('transitionend', () => {
-    // вправо за край (клон первого)
-    if (allSlides[currentIndex] === firstClone) {
-      currentIndex = 1;
-      goTo(currentIndex, false);
-      // перезапускаем анимацию
-      requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
+    // 2) позиционируем без анимации
+    function goTo(index, animate = true) {
+      const offset = -index * slideWidth + (track.parentElement.clientWidth - slideWidth) / 2;
+      if (!animate) track.style.transition = 'none';
+      else track.style.transition = 'transform 0.5s ease';
+      track.style.transform = `translateX(${offset}px)`;
+      allSlides.forEach((s, i) => s.classList.toggle('active', i === index));
     }
-    // влево за край (клон последнего)
-    if (allSlides[currentIndex] === lastClone) {
-      currentIndex = allSlides.length - 2;
-      goTo(currentIndex, false);
-      requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
-    }
-  });
+    goTo(currentIndex, false);
 
-  // 5) свайп
-  let startX;
-  track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-  track.addEventListener('touchend', e => {
-    const delta = startX - e.changedTouches[0].clientX;
-    if (delta > 50) nextBtn.click();
-    else if (delta < -50) prevBtn.click();
-  });
+    // 3) кнопки
+    nextBtn.onclick = () => { currentIndex++; goTo(currentIndex); };
+    prevBtn.onclick = () => { currentIndex--; goTo(currentIndex); };
+
+    // 4) после анимации — бесшумный «ремаппинг»
+    track.addEventListener('transitionend', () => {
+      // вправо за край (клон первого)
+      if (allSlides[currentIndex] === firstClone) {
+        currentIndex = 1;
+        goTo(currentIndex, false);
+        // перезапускаем анимацию
+        requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
+      }
+      // влево за край (клон последнего)
+      if (allSlides[currentIndex] === lastClone) {
+        currentIndex = allSlides.length - 2;
+        goTo(currentIndex, false);
+        requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
+      }
+    });
+
+    // 5) свайп
+    let startX;
+    track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    track.addEventListener('touchend', e => {
+      const delta = startX - e.changedTouches[0].clientX;
+      if (delta > 50) nextBtn.click();
+      else if (delta < -50) prevBtn.click();
+    });
 
 
 
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const btn = document.getElementById("scrollToTopBtn");
-        if (btn) {
-          btn.addEventListener("click", () =>
-            window.scrollTo({ top: 0, behavior: "smooth" })
-          );
-        }
-      });
-    </script>
-    <script src="./script.js"></script>
-  </body>
+    document.addEventListener("DOMContentLoaded", () => {
+      const btn = document.getElementById("scrollToTopBtn");
+      if (btn) {
+        btn.addEventListener("click", () =>
+          window.scrollTo({ top: 0, behavior: "smooth" })
+        );
+      }
+    });
+  </script>
+  <script src="./script.js"></script>
+</body>
+
 </html>

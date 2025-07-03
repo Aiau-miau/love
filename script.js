@@ -38,7 +38,7 @@ const specialMap = {
 
 // ========== УТИЛИТЫ ==========
 function updateHeaderTitle(key) {
-  headerTitle.textContent = labels[key] || labels.all;
+  
 }
 
 function debounce(fn, ms) {
@@ -82,6 +82,8 @@ document.querySelectorAll("#categoryList a[data-cat]").forEach(a => {
   a.addEventListener("click", e => {
     e.preventDefault();
     specialFilter = null;
+    document.getElementById("categoryList").classList.remove("hide-category-list");
+
     activeCategory = a.dataset.cat;
     document.querySelectorAll("#categoryList a").forEach(x => x.classList.remove("active"));
     a.classList.add("active");
@@ -283,18 +285,21 @@ function loadAndInit() {
 
 if (urlSpecial === "baby") {
   specialFilter = ["baby_boy", "baby_girl"];
-  updateHeaderTitle("baby");     // если вы заводили в labels ключ "baby":"Выписка"
+  updateHeaderTitle("baby");  
+  document.getElementById("categoryList").classList.add("hide-category-list");   // если вы заводили в labels ключ "baby":"Выписка"
 }else if (urlSpecial === "birth") {
   activeCategory   = "all";
   specialFilter    = null;
   birthFilterWord  = "birth";      // <- вот здесь
   updateHeaderTitle("birth");
+    document.getElementById("categoryList").classList.add("hide-category-list");
 }else if (urlSpecial === "popular") {
   activeCategory     = "all";
   specialFilter      = null;
   birthFilterWord    = null;
   popularFilterWord  = "yes";      // ищем yes в 7-м столбце
   updateHeaderTitle("popular");
+    document.getElementById("categoryList").classList.add("hide-category-list");
 }
 
 
@@ -417,6 +422,58 @@ document.querySelectorAll(".category h3").forEach(h3 => {
   });
 });
 const urlParams = new URLSearchParams(window.location.search);
+
+// JS: добавляем перетаскивание мышью/пальцем
+const slider = document.getElementById('categoryList');
+let isDown = false, startX, scrollLeft;
+
+slider.addEventListener('mousedown', e => {
+  isDown = true;
+  slider.classList.add('dragging');
+  startX = e.pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('mouseleave', () => {
+  isDown = false;
+  slider.classList.remove('dragging');
+});
+slider.addEventListener('mouseup', () => {
+  isDown = false;
+  slider.classList.remove('dragging');
+});
+slider.addEventListener('mousemove', e => {
+  if (!isDown) return;
+  e.preventDefault();
+  const x = e.pageX - slider.offsetLeft;
+  const walk = (x - startX) * 1.5; // чувствительность
+  slider.scrollLeft = scrollLeft - walk;
+});
+
+// Для тача (мобильных)
+slider.addEventListener('touchstart', e => {
+  startX = e.touches[0].pageX - slider.offsetLeft;
+  scrollLeft = slider.scrollLeft;
+});
+slider.addEventListener('touchmove', e => {
+  const x = e.touches[0].pageX - slider.offsetLeft;
+  const walk = (x - startX) * 1.5;
+  slider.scrollLeft = scrollLeft - walk;
+});
+
+// Фильтрация при клике (как у вас)
+slider.querySelectorAll('a[data-cat]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    // удаляем .active и ставим на кликнутый
+    slider.querySelectorAll('a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+    // ваш существующий код:
+    activeCategory = a.dataset.cat;
+    specialFilter = null;
+    debouncedRender();
+  });
+});
+
 
 
 
