@@ -796,6 +796,10 @@ hr{
 .hide-category-list {
   display: none !important;
 }
+#photozone {
+  text-decoration: none;
+  margin-top: 12px;
+}
 
 @media only screen and (max-width: 1024px) {
   .grid {

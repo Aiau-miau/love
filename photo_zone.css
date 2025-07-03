@@ -358,6 +358,10 @@ hr{
 .col a{
   color: gray;
 }
+#photozone {
+  text-decoration: none;
+  margin-top: 12px;
+}
 
 @media only screen and (max-width:1024px){
   .photoZoneContainer{
