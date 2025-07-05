@@ -8,6 +8,11 @@
   <link rel="stylesheet" href="main.css" />
 </head>
 <script>
+  if (window.location.hostname === "www.loveballoon.kz") {
+    window.location.href = "https://loveballoon.kz";
+  }
+</script>
+<script>
   // Загрузим и покажем первые 5 карточек
   document.addEventListener("DOMContentLoaded", () => {
     const previewContainer = document.getElementById("previewContainer");
@@ -121,7 +126,7 @@
     <div class="other-links">
       <a href="about.html">О Нас</a>
       <a href="cart.html">Корзина</a>
-      <a href="./favorites.html">Избранные</a>  
+      <a href="./favorites.html">Избранные</a>
     </div>
   </div>
   <div class="container">
@@ -246,151 +251,178 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script src="./script.js"></script>
   <script>
-    // Функция для отправки заказа с картинкой и ссылкой Kaspi
-    function orderFromPopular(name, price, desc, imgUrl) {
-      const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
-      const text =
-        `Здравствуйте! Хочу заказать:\n\n` +
-        `${name} — ${price} ₸\n` +
-        `Описание: ${desc}\n\n` +
-        `Фото товара: ${imgUrl}\n\n` +
-        `💳 Оплата: ${kaspiUrl}`;
-      const message = encodeURIComponent(text);
-      window.open(
-        `https://api.whatsapp.com/send?phone=+77023971888&text=${message}`,
-        "_blank"
-      );
+    // Переадресация с www.
+    if (window.location.hostname === "www.loveballoon.kz") {
+      window.location.href = "https://loveballoon.kz";
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      // Проверка наличия DOM-элементов
+      const previewContainer = document.getElementById("previewContainer");
       const popularContainer = document.getElementById("popularContainer");
-      const csvUrl =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" +
-        Date.now();
+      const showMoreBtn = document.getElementById("showMoreBtn");
+      const showPopularBtn = document.getElementById("showPopularBtn");
+      const carouselTrack = document.querySelector(".carousel-track");
 
-      Papa.parse(csvUrl, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete(result) {
-          const flagField = result.meta.fields[7];
-          const popularOnly = result.data
-            .filter(
-              (item) => (item[flagField] || "").trim().toLowerCase() === "yes"
-            )
-            .slice(0, 5);
+      if (previewContainer) {
+        Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" + Date.now(), {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete(result) {
+            const fields = result.meta.fields;
+            const data = result.data.slice(0, 5);
+            data.forEach(item => {
+              const name = item[fields[0]];
+              const img = item[fields[1]];
+              const price = item[fields[2]];
+              const desc = item[fields[3]].replace(/`/g, "'");
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
+                <div class="card-img-wrap">
+                  <img class="all-products-img" src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
+                </div>
+                <div class="bot">
+                  <div class="card-title">
+                    <p>${name}</p>
+                    <p class="price">${price} ₸</p>
+                  </div>
+                  <button onclick="orderFromPreview(
+                    '${name.replace(/'/g, "\\'")}',
+                    '${price}',
+                    \`${desc}\`,
+                    '${img}'
+                  )">Заказать</button>
+                </div>
+              `;
+              previewContainer.appendChild(card);
+            });
+          }
+        });
+      }
 
-          popularOnly.forEach((item) => {
-            const name = item[result.meta.fields[0]];
-            const img = item[result.meta.fields[1]];
-            const price = item[result.meta.fields[2]];
-            const desc = item[result.meta.fields[3]].replace(/`/g, "'");
+      if (popularContainer) {
+        Papa.parse("https://docs.google.com/spreadsheets/d/e/2PACX-1vTbtBsnRAE2vVA4sCdHNUnH_3Rao9DlTnzZxs_C9ate6mA2KA6_WeQsfZaxluCmjBv61Frn-eoIXyoL/pub?output=csv&sheet=Лист1&cb=" + Date.now(), {
+          download: true,
+          header: true,
+          skipEmptyLines: true,
+          complete(result) {
+            const flagField = result.meta.fields[7];
+            const popularOnly = result.data.filter(item =>
+              (item[flagField] || "").trim().toLowerCase() === "yes"
+            ).slice(0, 5);
+            popularOnly.forEach(item => {
+              const name = item[result.meta.fields[0]];
+              const img = item[result.meta.fields[1]];
+              const price = item[result.meta.fields[2]];
+              const desc = item[result.meta.fields[3]].replace(/`/g, "'");
+              const card = document.createElement("div");
+              card.className = "card";
+              card.innerHTML = `
+                <div class="card-img-wrap">
+                  <img src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
+                </div>
+                <div class="bot">
+                  <div class="card-title">
+                    <p>${name}</p>
+                    <p class="price">${price} ₸</p>
+                  </div>
+                  <button onclick="orderFromPopular(
+                    '${name.replace(/'/g, "\\'")}',
+                    '${price}',
+                    \`${desc}\`,
+                    '${img}'
+                  )">Заказать</button>
+                </div>
+              `;
+              popularContainer.appendChild(card);
+            });
+          }
+        });
+      }
 
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `
-            <div class="card-img-wrap">
-              <img src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
-            </div>
-            <div class="bot">
-              <div class="card-title">
-                <p>${name}</p>
-                <p class="price">${price} ₸</p>
-              </div>
-              <button
-                onclick="orderFromPopular(
-                  '${name.replace(/'/g, "\\'")}',
-                  '${price}',
-                  \`${desc}\`,
-                  '${img}'
-                )"
-              >Заказать</button>
-            </div>
-          `;
-            popularContainer.appendChild(card);
-          });
-        },
-        error(err) {
-          console.error("PapaParse error:", err);
-        },
-      });
+      if (showMoreBtn) {
+        showMoreBtn.addEventListener("click", () => {
+          window.location.href = "shop.html";
+        });
+      }
 
-      document
-        .getElementById("showPopularBtn")
-        .addEventListener("click", () => {
+      if (showPopularBtn) {
+        showPopularBtn.addEventListener("click", () => {
           window.location.href = "shop.html?special=popular";
         });
+      }
+
+      if (carouselTrack) {
+        const prevBtn = document.querySelector(".prev");
+        const nextBtn = document.querySelector(".next");
+        let slides = Array.from(carouselTrack.children);
+        const slideWidth = slides[0].getBoundingClientRect().width + 40;
+        const firstClone = slides[0].cloneNode(true);
+        const lastClone = slides[slides.length - 1].cloneNode(true);
+        carouselTrack.appendChild(firstClone);
+        carouselTrack.insertBefore(lastClone, carouselTrack.firstChild);
+        let allSlides = Array.from(carouselTrack.children);
+        let currentIndex = 1;
+
+        function goTo(index, animate = true) {
+          const offset = -index * slideWidth + (carouselTrack.parentElement.clientWidth - slideWidth) / 2;
+          if (!animate) carouselTrack.style.transition = "none";
+          else carouselTrack.style.transition = "transform 0.5s ease";
+          carouselTrack.style.transform = `translateX(${offset}px)`;
+          allSlides.forEach((s, i) => s.classList.toggle("active", i === index));
+        }
+        goTo(currentIndex, false);
+
+        nextBtn.onclick = () => { currentIndex++; goTo(currentIndex); };
+        prevBtn.onclick = () => { currentIndex--; goTo(currentIndex); };
+
+        carouselTrack.addEventListener("transitionend", () => {
+          if (allSlides[currentIndex] === firstClone) {
+            currentIndex = 1;
+            goTo(currentIndex, false);
+            requestAnimationFrame(() => carouselTrack.style.transition = "transform 0.5s ease");
+          }
+          if (allSlides[currentIndex] === lastClone) {
+            currentIndex = allSlides.length - 2;
+            goTo(currentIndex, false);
+            requestAnimationFrame(() => carouselTrack.style.transition = "transform 0.5s ease");
+          }
+        });
+
+        let startX;
+        carouselTrack.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+        carouselTrack.addEventListener("touchend", e => {
+          const delta = startX - e.changedTouches[0].clientX;
+          if (delta > 50) nextBtn.click();
+          else if (delta < -50) prevBtn.click();
+        });
+      }
+
+      const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+      if (scrollToTopBtn) {
+        scrollToTopBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      }
+
     });
 
-
-
-
-    const track = document.querySelector('.carousel-track');
-    let slides = Array.from(track.children);
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    const slideWidth = slides[0].getBoundingClientRect().width + 40; // margin
-    // 1) клоны
-    const firstClone = slides[0].cloneNode(true);
-    const lastClone = slides[slides.length - 1].cloneNode(true);
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, track.firstChild);
-    let allSlides = Array.from(track.children);
-    let currentIndex = 1;
-
-    // 2) позиционируем без анимации
-    function goTo(index, animate = true) {
-      const offset = -index * slideWidth + (track.parentElement.clientWidth - slideWidth) / 2;
-      if (!animate) track.style.transition = 'none';
-      else track.style.transition = 'transform 0.5s ease';
-      track.style.transform = `translateX(${offset}px)`;
-      allSlides.forEach((s, i) => s.classList.toggle('active', i === index));
+    function orderFromPreview(name, price, desc, imgUrl) {
+      const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+      const text = `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\nОписание: ${desc}\n\nФото товара: ${imgUrl}\n\n💳 Оплата: ${kaspiUrl}`;
+      const message = encodeURIComponent(text);
+      window.open(`https://api.whatsapp.com/send?phone=+77023971888&text=${message}`, "_blank");
     }
-    goTo(currentIndex, false);
 
-    // 3) кнопки
-    nextBtn.onclick = () => { currentIndex++; goTo(currentIndex); };
-    prevBtn.onclick = () => { currentIndex--; goTo(currentIndex); };
-
-    // 4) после анимации — бесшумный «ремаппинг»
-    track.addEventListener('transitionend', () => {
-      // вправо за край (клон первого)
-      if (allSlides[currentIndex] === firstClone) {
-        currentIndex = 1;
-        goTo(currentIndex, false);
-        // перезапускаем анимацию
-        requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
-      }
-      // влево за край (клон последнего)
-      if (allSlides[currentIndex] === lastClone) {
-        currentIndex = allSlides.length - 2;
-        goTo(currentIndex, false);
-        requestAnimationFrame(() => track.style.transition = 'transform 0.5s ease');
-      }
-    });
-
-    // 5) свайп
-    let startX;
-    track.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-    track.addEventListener('touchend', e => {
-      const delta = startX - e.changedTouches[0].clientX;
-      if (delta > 50) nextBtn.click();
-      else if (delta < -50) prevBtn.click();
-    });
-
-
-
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const btn = document.getElementById("scrollToTopBtn");
-      if (btn) {
-        btn.addEventListener("click", () =>
-          window.scrollTo({ top: 0, behavior: "smooth" })
-        );
-      }
-    });
+    function orderFromPopular(name, price, desc, imgUrl) {
+      const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+      const text = `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\nОписание: ${desc}\n\nФото товара: ${imgUrl}\n\n💳 Оплата: ${kaspiUrl}`;
+      const message = encodeURIComponent(text);
+      window.open(`https://api.whatsapp.com/send?phone=+77023971888&text=${message}`, "_blank");
+    }
   </script>
-  
 </body>
 
 </html>
