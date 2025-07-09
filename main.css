@@ -659,11 +659,11 @@ hr {
 
 
 /* 320px and below */
-@media screen and (max-width: 390px) {
- .container .content {
+@media screen and (max-width: 430px) {
+  .container .content {
     top: 70%;
     left: 32%;
- }
+  }
 
   .all {
     height: 70vh;
