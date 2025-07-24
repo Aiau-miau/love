@@ -657,10 +657,8 @@ hr {
   }
 }
 @media (min-width: 415px) and (max-width: 430px) {
-  .all {
-    height: 70vh;
-    position: relative;
-    bottom: 50px;
+  .item box1 h2 {
+    bottom: 60px;
   }
 }
 
