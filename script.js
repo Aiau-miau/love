@@ -393,28 +393,29 @@ function openWhatsAppOrder(name, price, desc, imgUrl, kaspiUrl) {
 
 
 function openModal({ name, img, price, desc }) {
+  // Populate modal fields
   modal.querySelector("#modalImg").src = img;
   modal.querySelector("#modalTitle").textContent = name;
   modal.querySelector("#modalPrice").textContent = price + " ₸";
   modal.querySelector("#modalDesc").textContent = desc;
   modal.style.display = "flex";
 
+  // Add to cart
   modal.querySelector("#addToCartBtn").onclick = () => {
     const cart = JSON.parse(localStorage.getItem("cartItems") || "[]");
     cart.push({ name, img, price });
     localStorage.setItem("cartItems", JSON.stringify(cart));
     modal.style.display = "none";
   };
+
+  // Order single item via WhatsApp
   modal.querySelector("#orderSingleBtn").onclick = () => {
-  const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
-  openWhatsAppOrder(currentItem.name, currentItem.price, currentItem.desc, currentItem.img, kaspiUrl);
-};
-
-
-  modal.querySelectorAll("#closeModal, #modalOverlay").forEach(el => {
-    el.onclick = () => modal.style.display = "none";
-  });
+    const kaspiUrl = "https://pay.kaspi.kz/pay/pizgc94e";
+    // Use the parameters passed into openModal
+    openWhatsAppOrder(name, price, desc, img, kaspiUrl);
+  };
 }
+
 document.querySelectorAll(".category h3").forEach(h3 => {
   h3.addEventListener("click", () => {
     document.querySelectorAll(".category h3").forEach(x => x.classList.remove("active"));

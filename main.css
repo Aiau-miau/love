@@ -656,6 +656,13 @@ hr {
     font-size: 1.5rem;
   }
 }
+@media (min-width: 415px) and (max-width: 430px) {
+  .all {
+    height: 70vh;
+    position: relative;
+    bottom: 50px;
+  }
+}
 
 
 /* 320px and below */
