@@ -656,12 +656,6 @@ hr {
     font-size: 1.5rem;
   }
 }
-@media (min-width: 415px) and (max-width: 430px) {
-  .item h2 {
-    bottom: 60px;
-  }
-}
-
 
 /* 320px and below */
 @media screen and (max-width: 430px) {
@@ -680,6 +674,11 @@ hr {
 
   .also_about h2 {
     font-size: 20px;
+  }
+}
+@media (min-width: 401px) and (max-width: 414px) {
+  .item h2 {
+    bottom: 60px;
   }
 }
 
