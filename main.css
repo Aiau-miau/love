@@ -678,7 +678,7 @@ hr {
 }
 @media (min-width: 401px) and (max-width: 414px) {
   .item h2 {
-    bottom: 60px;
+    bottom: 120px;
   }
 }
 
