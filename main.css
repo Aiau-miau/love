@@ -681,6 +681,11 @@ hr {
     bottom: 120px;
   }
 }
+@media (min-width: 415px) and (max-width: 430px) {
+  .item h2 {
+    bottom: 120px;
+  }
+}
 
 @media screen and (max-width: 320px) {
   .container .content {
