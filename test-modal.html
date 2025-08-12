@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modal test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding:20px; }
+    .btn { padding:10px 16px; border-radius:6px; cursor:pointer; }
+    /* Modal overlay */
+    .modal {
+      display: none; /* hidden by default */
+      position: fixed;
+      inset: 0;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.45);
+      z-index: 9999;
+    }
+    .modal.open { display: flex; } /* visible when .open present */
+
+    .modal-content {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+      padding: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Modal open/close test</h1>
+  <button id="openTest" class="btn">Open modal</button>
+
+  <!-- Your modal — make sure id="modal" here or update JS -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button id="modalClose" class="modal-close" aria-label="Закрыть">✕</button>
+      <h2 id="modalTitle">Название товара</h2>
+      <img id="modalImg" src="https://via.placeholder.com/400x200" style="max-width:100%;border-radius:6px" alt="">
+      <p id="modalDesc">Описание товара...</p>
+      <p id="modalPrice">1000 ₸</p>
+      <div style="margin-top:12px;">
+        <button id="orderSingleBtn" class="btn">Заказать</button>
+        <button id="addToCartBtn" class="btn">В корзину</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= SIMPLE, ROBUST MODAL LOGIC =======
+    const modal = document.getElementById('modal');
+    const modalClose = document.getElementById('modalClose');
+
+    function openModal(data = {}) {
+      // populate content (if provided)
+      if (data.name) document.getElementById('modalTitle').textContent = data.name;
+      if (data.img) document.getElementById('modalImg').src = data.img;
+      if (data.desc) document.getElementById('modalDesc').textContent = data.desc;
+      if (data.price) document.getElementById('modalPrice').textContent = data.price + ' ₸';
+
+      // show
+      if (!modal) return;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+
+      // lock scroll (optional)
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = ''; // restore
+    }
+
+    // open test
+    document.getElementById('openTest').addEventListener('click', () => {
+      openModal({
+        name: 'Тестовый шарик',
+        img: 'https://via.placeholder.com/640x360',
+        desc: 'Пример описания.',
+        price: 1500
+      });
+    });
+
+    // close button
+    modalClose?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeModal();
+    });
+
+    // click outside: close when click target is the overlay itself
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        // only close if modal visible
+        if (modal && modal.classList.contains('open')) closeModal();
+      }
+    });
+
+    // Prevent clicks inside .modal-content from bubbling up (optional safety)
+    const modalContent = modal?.querySelector('.modal-content');
+    modalContent?.addEventListener('click', (e) => e.stopPropagation());
+  </script>
+</body>
+</html>
