@@ -136,7 +136,7 @@ ready(() => {
       `💳 Оплата: ${kaspiUrl}`;
 
     const encoded = encodeURIComponent(text);
-    const whatsappLink = `https://api.whatsapp.com/send?phone=+77023971888&text=${encoded}`;
+    const whatsappLink = `https://api.whatsapp.com/send?phone=+77013971888&text=${encoded}`;
 
     const newWin = window.open(whatsappLink, "_blank");
     if (!newWin || newWin.closed || typeof newWin.closed === "undefined") {
