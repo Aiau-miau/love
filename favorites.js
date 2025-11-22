@@ -157,7 +157,7 @@ function openModal({ name, img, price, desc }) {
       `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
     );
     window.open(
-      `https://api.whatsapp.com/send?phone=+77023971888&text=${message}`,
+      `https://api.whatsapp.com/send?phone=+77013971888&text=${message}`,
       '_blank'
     );
     modal.style.display = 'none';
