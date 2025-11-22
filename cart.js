@@ -87,7 +87,7 @@ function openWhatsAppOrder(name, price, desc, imgUrl) {
     `Фото товара: ${imgUrl}\n\n` +
     `💳 Оплата: ${kaspiUrl}`;
 
-  const link = `https://api.whatsapp.com/send?phone=+77023971888&text=${encodeURIComponent(text)}`;
+  const link = `https://api.whatsapp.com/send?phone=+77013971888&text=${encodeURIComponent(text)}`;
   const newWin = window.open(link, '_blank');
   if (!newWin) window.location.href = link;  // fallback if popup blocked
 }
