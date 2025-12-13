@@ -59,7 +59,7 @@ ready(() => {
       woman: "Девушке",
       birth: "День Рождения",
       popular: "Популярные товары",
-      gender-party: "Гендер party",
+      gender_party: "Гендер party",
     };
     const t = labels[key] || labels.all;
     if (headerTitleEl) {
