@@ -187,7 +187,7 @@ ready(() => {
       card.className = "card";
       card.innerHTML = `
         <div class="card-img-wrap">
-          <img class="all-products-img" src="${img}" onerror="this.src='https://via.placeholder.com/240x160'">
+          <img loading="lazy" class="all-products-img" src="${img}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'240\' height=\'160\'><rect width=\'100%\' height=\'100%\' fill=\'%23e8e8e8\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-size=\'20\'>Фото</text></svg>'">
           <img class="heart-icon ${favorites.includes(name) ? "favorited" : ""}"
                src="./images/${favorites.includes(name) ? "heart_icon_after" : "heart_icon_before"}.svg"
                alt="Избранное">
