@@ -100,6 +100,57 @@ ready(() => {
     // show modal (your HTML uses inline style display:none)
     modal.style.display = "flex";
     document.body.style.overflow = "hidden"; // optional: lock background scroll
+
+    // Attach modal controls (remove old listeners by cloning nodes)
+    const overlayEl = modal.querySelector('#modalOverlay');
+    const contentEl = modal.querySelector('#modalContent');
+    const addBtn = modal.querySelector('#addToCartBtn');
+    const orderBtn = modal.querySelector('#orderSingleBtn');
+    const closeBtn = modal.querySelector('#closeModal');
+
+    // If elements exist, replace them with clones to clear previous listeners
+    if (overlayEl) overlayEl.replaceWith(overlayEl.cloneNode(true));
+    if (contentEl) contentEl.replaceWith(contentEl.cloneNode(true));
+    if (addBtn) addBtn.replaceWith(addBtn.cloneNode(true));
+    if (orderBtn) orderBtn.replaceWith(orderBtn.cloneNode(true));
+    if (closeBtn) closeBtn.replaceWith(closeBtn.cloneNode(true));
+
+    // Re-query fresh elements
+    const newOverlay = modal.querySelector('#modalOverlay');
+    const newContent = modal.querySelector('#modalContent');
+    const newAddBtn = modal.querySelector('#addToCartBtn');
+    const newOrderBtn = modal.querySelector('#orderSingleBtn');
+    const newCloseBtn = modal.querySelector('#closeModal');
+
+    // wiring
+    newOverlay?.addEventListener('click', () => {
+      closeModal();
+    });
+
+    newContent?.addEventListener('click', (e) => e.stopPropagation());
+
+    newCloseBtn?.addEventListener('click', () => {
+      closeModal();
+    });
+
+    newAddBtn?.addEventListener('click', () => {
+      const cart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+      cart.push({ name, img, price });
+      localStorage.setItem('cartItems', JSON.stringify(cart));
+      closeModal();
+    });
+
+    newOrderBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const message = encodeURIComponent(
+        `Здравствуйте! Хочу заказать:\n\n${name} — ${price} ₸\n\nОписание: ${desc}`
+      );
+      window.open(
+        `https://api.whatsapp.com/send?phone=+77013971888&text=${message}`,
+        '_blank'
+      );
+      closeModal();
+    });
   }
 
   function closeModal() {
