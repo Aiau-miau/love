@@ -1,5 +1,20 @@
 // script.js — drop-in replacement for your page
 
+// Simple global menu controls (used by inline onclick attributes in HTML)
+function openMenu() {
+  const burgerMenu = document.getElementById('burger_menu');
+  const overlay = document.getElementById('overlay');
+  burgerMenu?.classList.add('open');
+  overlay?.classList.add('active');
+}
+
+function closeMenu() {
+  const burgerMenu = document.getElementById('burger_menu');
+  const overlay = document.getElementById('overlay');
+  burgerMenu?.classList.remove('open');
+  overlay?.classList.remove('active');
+}
+
 // run when DOM is ready
 function ready(fn) {
   if (document.readyState !== "loading") fn();
@@ -126,6 +141,30 @@ ready(() => {
   if (modalContent) {
     modalContent.addEventListener("click", (e) => e.stopPropagation());
   }
+
+  // ====== FILTER PANEL ======
+  const filterOpenBtn = document.getElementById('filter-open-btn');
+  const filterCloseBtn = document.getElementById('filter-close-btn');
+  const filterMenu = document.getElementById('filter-menu');
+  const filterOverlay = document.getElementById('filter-overlay');
+
+  function openFilter() {
+    filterMenu?.classList.add('open');
+    // small delay to allow CSS transition
+    setTimeout(() => filterMenu?.classList.add('visible'), 10);
+    filterOverlay?.classList.add('active');
+  }
+
+  function closeFilter() {
+    filterMenu?.classList.remove('visible');
+    // wait for opacity transition then remove from layout
+    setTimeout(() => filterMenu?.classList.remove('open'), 300);
+    filterOverlay?.classList.remove('active');
+  }
+
+  filterOpenBtn?.addEventListener('click', (e) => { e.stopPropagation(); openFilter(); });
+  filterCloseBtn?.addEventListener('click', (e) => { e.stopPropagation(); closeFilter(); });
+  filterOverlay?.addEventListener('click', closeFilter);
 
   // ====== WHATSAPP ORDER ======
   function openWhatsAppOrder(name, price, desc, imgUrl, kaspiUrl) {
